@@ -1,0 +1,72 @@
+@Entry
+@Component
+struct Index {
+  build(){
+      Row(){
+        Column(){
+          Text('< 返回')
+            .textAlign(TextAlign.Start)
+            .fontSize(16)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(Color.Gray)
+            .margin({
+              top:'30vp',
+              left:'30vp'
+            })
+            .width('100%')
+          Text('注册账户')
+            .textAlign(TextAlign.Start)
+            .fontSize(30)
+            .fontWeight(FontWeight.Bold)
+            .margin({
+              top:'120vp',
+              left:'30vp'
+            })
+            .width('100%')
+          Text('请输入手机号')
+            .textAlign(TextAlign.Start)
+            .fontColor(Color.Gray)
+            .fontSize(18)
+            .margin({
+              top:'30vp',
+              left:'50vp'
+            })
+            .width('100%')
+          TextInput({ placeholder: ('手机号') })
+            .type(InputType.PhoneNumber)
+            .margin({
+              top:'60vp'
+            })
+            .width('80%')
+          Button('同意协议并注册')
+            .width(300)
+            .height(40)
+            .margin({
+              top:'80vp'
+            })
+            .backgroundColor(Color.Green)
+          Row(){
+            Checkbox({name:'agreement'})
+              .selectedColor(Color.Green)
+              .margin({
+                top:'30vp'
+              })
+            Text('我已阅读并同意')
+              .fontColor(Color.Gray)
+              .fontSize(12)
+              .margin({
+                top:'30vp',
+                left:'20vp'
+              })
+            Text('《电力用户分析软件服务协议》')
+              .fontColor(Color.Green)
+              .fontSize(12)
+              .margin({
+                top:'30vp',
+                left:'5vp'
+              })
+          }
+        }
+      }
+  }
+}
