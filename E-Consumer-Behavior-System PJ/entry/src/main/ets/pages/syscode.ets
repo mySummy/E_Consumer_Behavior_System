@@ -1,6 +1,19 @@
 @Entry
 @Component
+
 struct Index {
+  @State Codes:string = '点击发送验证码'
+  startCountdown() {
+    let countdown = 60;
+    const intervalId = setInterval(() => {
+      countdown -= 1;
+      this.Codes = countdown + ' 秒后可重新发送';
+      if (countdown <= 0) {
+        this.Codes = '点击发送验证码';
+        clearInterval(intervalId);
+      }
+    }, 1000);
+  }
   build(){
     Row(){
       Column(){
@@ -33,11 +46,24 @@ struct Index {
           })
           .width('100%')
         TextInput({ placeholder: ('验证码') })
-          .type(InputType.PhoneNumber)
+          .type(InputType.Number)
           .margin({
-            top:'100vp'
+            top:'80vp'
           })
           .width('80%')
+        Text(this.Codes)
+          .fontColor(Color.Green)
+          .textAlign(TextAlign.Start)
+          .onClick(()=>{
+              if (this.Codes === '点击发送验证码') {
+                this.startCountdown()
+              }
+          })
+          .margin({
+            top:'20vp',
+            left:'30vp'
+          })
+          .width('90%')
         Button('注册')
           .width(300)
           .height(40)
