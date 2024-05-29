@@ -1,6 +1,8 @@
+import router from '@ohos.router';
 @Entry
 @Component
-struct Index {
+struct Register {
+  @State params: any = router.getParams()
   build(){
       Row(){
         Column(){
@@ -9,8 +11,11 @@ struct Index {
             .fontSize(16)
             .fontWeight(FontWeight.Bold)
             .fontColor(Color.Gray)
+            .onClick(()=>{
+              router.back()
+            })
             .margin({
-              top:'30vp',
+              top:'40vp',
               left:'30vp'
             })
             .width('100%')
@@ -41,6 +46,19 @@ struct Index {
           Button('同意协议并注册')
             .width(300)
             .height(40)
+            .onClick(()=>{
+              router.pushUrl({
+                url:'pages/syscode',
+                params:{id : 1}
+              },
+                router.RouterMode.Single,
+                err=>{
+                  if(err){
+                    console.log('路由失败.')
+                  }
+                }
+              )
+            })
             .margin({
               top:'80vp'
             })

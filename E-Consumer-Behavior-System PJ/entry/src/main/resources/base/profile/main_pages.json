@@ -1,5 +1,9 @@
 {
   "src": [
-    "pages/Index"
+    "pages/forget",
+    "pages/Password",
+    "pages/register",
+    "pages/syscode",
+    "pages/logon"
   ]
 }

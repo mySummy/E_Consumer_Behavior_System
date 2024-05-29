@@ -1,6 +1,8 @@
+import router from '@ohos.router';
 @Entry
 @Component
-struct Index {
+struct Password {
+  @State params: any = router.getParams()
   build() {
     Row() {
       Column() {
@@ -9,8 +11,11 @@ struct Index {
           .fontSize(16)
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.Gray)
+          .onClick(()=>{
+            router.back()
+          })
           .margin({
-            top:'30vp',
+            top:'40vp',
             left:'30vp'
           })
           .width('100%')
@@ -59,6 +64,6 @@ struct Index {
       .width('100%')
 
     }
-    .height('80%')
+    .height('70%')
   }
 }

@@ -1,6 +1,9 @@
+import router from '@ohos.router';
 @Entry
 @Component
-struct Index {
+struct Logon {
+  @State message: string = 'Hello World'
+
   build() {
     Row() {
       Column() {
@@ -41,17 +44,42 @@ struct Index {
             top:'20vp'
           })
           .width('95%')
-
         Row({space : 180}){
           Text('忘记密码')
             .fontSize(16)
             .fontColor(Color.Gray)
+            .onClick(()=>{
+              router.pushUrl({
+                url:'pages/forget',
+                params:{id : 1}
+              },
+                router.RouterMode.Single,
+                err=>{
+                  if(err){
+                    console.log('路由失败.')
+                  }
+                }
+              )
+            })
             .margin({
               top:'30vp'
             })
           Text('注册账号')
             .fontSize(16)
             .fontColor(Color.Green)
+            .onClick(()=>{
+              router.pushUrl({
+                url:'pages/register',
+                params:{id : 1}
+              },
+                router.RouterMode.Single,
+                err=>{
+                  if(err){
+                    console.log('路由失败.')
+                  }
+                }
+              )
+            })
             .margin({
               top:'30vp'
             })
@@ -68,7 +96,6 @@ struct Index {
 
       }
       .width('100%')
-
     }
     .height('80%')
   }

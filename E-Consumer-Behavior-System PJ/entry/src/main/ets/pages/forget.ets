@@ -1,21 +1,8 @@
 import router from '@ohos.router';
 @Entry
 @Component
-
-struct Syscode {
+struct Forget {
   @State params: any = router.getParams()
-  @State Codes:string = '点击发送验证码'
-  startCountdown() {
-    let countdown = 60;
-    const intervalId = setInterval(() => {
-      countdown -= 1;
-      this.Codes = countdown + ' 秒后可重新发送';
-      if (countdown <= 0) {
-        this.Codes = '点击发送验证码';
-        clearInterval(intervalId);
-      }
-    }, 1000);
-  }
   build(){
     Row(){
       Column(){
@@ -32,7 +19,7 @@ struct Syscode {
             left:'30vp'
           })
           .width('100%')
-        Text('请输入验证码')
+        Text('忘记密码')
           .textAlign(TextAlign.Start)
           .fontSize(30)
           .fontWeight(FontWeight.Bold)
@@ -41,7 +28,7 @@ struct Syscode {
             left:'30vp'
           })
           .width('100%')
-        Text('验证码已发送至 phone')
+        Text('请输入手机号')
           .textAlign(TextAlign.Start)
           .fontColor(Color.Gray)
           .fontSize(18)
@@ -50,31 +37,18 @@ struct Syscode {
             left:'50vp'
           })
           .width('100%')
-        TextInput({ placeholder: ('验证码') })
-          .type(InputType.Number)
+        TextInput({ placeholder: ('手机号') })
+          .type(InputType.PhoneNumber)
           .margin({
-            top:'50vp'
+            top:'60vp'
           })
           .width('80%')
-        Text(this.Codes)
-          .fontColor(Color.Green)
-          .textAlign(TextAlign.Start)
-          .onClick(()=>{
-              if (this.Codes === '点击发送验证码') {
-                this.startCountdown()
-              }
-          })
-          .margin({
-            top:'40vp',
-            left:'30vp'
-          })
-          .width('90%')
-        Button('注册')
+        Button('验证手机号')
           .width(300)
           .height(40)
           .onClick(()=>{
             router.pushUrl({
-              url:'pages/Password',
+              url:'pages/syscode',
               params:{id : 1}
             },
               router.RouterMode.Single,
@@ -86,11 +60,12 @@ struct Syscode {
             )
           })
           .margin({
-            top:'50vp'
+            top:'80vp'
           })
           .backgroundColor(Color.Green)
-
       }
+      .width('100%')
     }
+    .height('60%')
   }
 }
