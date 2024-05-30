@@ -3,7 +3,8 @@ import router from '@ohos.router';
 @Component
 struct Logon {
   @State message: string = 'Hello World'
-
+  @State username: string = ''
+  @State pwd: string = ''
   build() {
     Row() {
       Column() {
@@ -32,18 +33,26 @@ struct Logon {
         Text('欢迎使用 电力客户分析')
           .fontSize(16)
           .fontColor(Color.Gray)
-        TextInput({ placeholder: ('手机号') })
+        TextInput({ placeholder:('输入手机号')})
           .type(InputType.PhoneNumber)
           .margin({
             top:'30vp'
           })
+          .onChange(val=>{
+            this.username = val
+            console.log(val)
+          })
           .width('95%')
-        TextInput({ placeholder: ('输入密码') })
+        TextInput({placeholder: ('输入密码') })
           .type(InputType.Password)
           .margin({
             top:'20vp'
           })
           .width('95%')
+          .onChange(val=>{
+            this.pwd = val
+            console.log(val)
+          })
         Row({space : 180}){
           Text('忘记密码')
             .fontSize(16)

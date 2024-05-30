@@ -1,8 +1,11 @@
 import router from '@ohos.router';
+import Prompt from '@system.prompt';
 @Entry
 @Component
 struct Password {
   @State params: any = router.getParams()
+  @State pwd1:string = ''
+  @State pwd2:string = ''
   build() {
     Row() {
       Column() {
@@ -42,11 +45,19 @@ struct Password {
           .margin({
             top:'80vp'
           })
+          .onChange(val=>{
+            this.pwd1 = val
+            console.log(val)
+          })
           .width('95%')
         TextInput({ placeholder: ('再次输入密码') })
           .type(InputType.Password)
           .margin({
             top:'20vp'
+          })
+          .onChange(val=>{
+            this.pwd2 = val
+            console.log(val)
           })
           .width('95%')
 
@@ -58,6 +69,14 @@ struct Password {
             top:'100vp'
           })
           .backgroundColor(Color.Green)
+          .onClick(()=>{
+            if (this.pwd1 != this.pwd2) {
+              Prompt.showDialog({
+                message: "两次密码不一致",
+              });
+
+            }
+          })
 
 
       }

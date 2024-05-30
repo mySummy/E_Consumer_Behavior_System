@@ -3,6 +3,7 @@ import router from '@ohos.router';
 @Component
 struct Forget {
   @State params: any = router.getParams()
+  @State username: string =''
   build(){
     Row(){
       Column(){
@@ -41,6 +42,10 @@ struct Forget {
           .type(InputType.PhoneNumber)
           .margin({
             top:'60vp'
+          })
+          .onChange(val=>{
+            this.username = val
+            console.log(val)
           })
           .width('80%')
         Button('验证手机号')
