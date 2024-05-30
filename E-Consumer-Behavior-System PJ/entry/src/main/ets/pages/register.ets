@@ -1,8 +1,11 @@
 import router from '@ohos.router';
+import Prompt from '@system.prompt';
 @Entry
 @Component
 struct Register {
   @State params: any = router.getParams()
+  @State allow: Boolean = false
+  @State username: string =''
   build(){
       Row(){
         Column(){
@@ -42,12 +45,22 @@ struct Register {
             .margin({
               top:'60vp'
             })
+            .onChange(val=>{
+              this.username = val
+              console.log(val)
+            })
             .width('80%')
           Button('同意协议并注册')
             .width(300)
             .height(40)
             .onClick(()=>{
-              router.pushUrl({
+              if (!this.allow) {
+                Prompt.showDialog({
+                  message: "请勾选允许登录选项",
+                });
+              }
+              else{
+                router.pushUrl({
                 url:'pages/syscode',
                 params:{id : 1}
               },
@@ -58,6 +71,7 @@ struct Register {
                   }
                 }
               )
+              }
             })
             .margin({
               top:'80vp'
@@ -66,6 +80,12 @@ struct Register {
           Row(){
             Checkbox({name:'agreement'})
               .selectedColor(Color.Green)
+              .onChange(val => {
+                this.allow = val;
+                console.log('agreement change is ' + val);
+                console.log('this is ' + this);
+                console.log('allow is ' + this.allow);
+              })
               .margin({
                 top:'30vp'
               })

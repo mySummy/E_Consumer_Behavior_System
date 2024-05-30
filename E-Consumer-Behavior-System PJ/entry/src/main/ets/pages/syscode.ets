@@ -5,6 +5,7 @@ import router from '@ohos.router';
 struct Syscode {
   @State params: any = router.getParams()
   @State Codes:string = '点击发送验证码'
+  @State code:string = ''
   startCountdown() {
     let countdown = 60;
     const intervalId = setInterval(() => {
@@ -52,6 +53,10 @@ struct Syscode {
           .width('100%')
         TextInput({ placeholder: ('验证码') })
           .type(InputType.Number)
+          .onChange(val=>{
+            this.code = val
+            console.log(val)
+          })
           .margin({
             top:'50vp'
           })
