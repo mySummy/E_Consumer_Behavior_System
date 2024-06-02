@@ -1,5 +1,7 @@
 import router from '@ohos.router';
 import Prompt from '@system.prompt';
+import http from '@ohos.net.http';
+
 @Entry
 @Component
 struct Logon {
@@ -102,27 +104,62 @@ struct Logon {
           })
           .backgroundColor(Color.Green)
           .onClick(()=>{
-            if (this.username==='') {
-              console.log(this.username);
+            if (this.username === '') {
               Prompt.showDialog({
                 message: "请输入手机号",
               });
-            }
-            else if(this.pwd){
-              console.log(this.pwd);
+            } else if (this.pwd === '') {
               Prompt.showDialog({
                 message: "请输入密码",
               });
-            }
-            else{
-
+            } else {
+              const httpRequest = http.createHttp();
+              httpRequest.request(
+                'http://localhost:3000/login', // URL should be a string
+                {
+                  method: http.RequestMethod.POST, // 使用正确的枚举类型
+                  header: { 'Content-Type': 'application/json' },
+                  extraData: JSON.stringify({
+                    username: this.username,
+                    password: this.pwd
+                  }),
+                  readTimeout: 60000, // 超时时间
+                  connectTimeout: 60000 // 超时时间
+                }
+              ).then((data) => {
+                const response = JSON.parse(data.result as string); // 确保 result 是字符串类型
+                if (data.responseCode === 200 && response.message === 'Login successful') {
+                  // 登录成功，进行相应的操作
+                  console.log('登录成功');
+                  router.pushUrl({
+                    url: 'pages/syscode', // 主页页面
+                    params: { id: 1 }
+                  },
+                    router.RouterMode.Single,
+                    err => {
+                      if (err) {
+                        console.log('路由失败.');
+                      }
+                    }
+                  );
+                } else {
+                  // 登录失败，显示错误信息
+                  Prompt.showDialog({
+                    message: '登录失败: ' + response.message,
+                  });
+                }
+              }).catch((err) => {
+                // 网络错误或其他错误
+                Prompt.showDialog({
+                  message: '网络错误: ' + err,
+                });
+              });
             }
           })
-
-
       }
       .width('100%')
     }
     .height('80%')
   }
 }
+
