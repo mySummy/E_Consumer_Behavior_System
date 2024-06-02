@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="811334d0-ee7e-4850-8e48-93beeca61439" name="更改" comment="" />
+    <list default="true" id="811334d0-ee7e-4850-8e48-93beeca61439" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/project/entry/src/main/resources/base/media/clean.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/entry/src/main/resources/base/media/head.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/entry/src/main/resources/base/media/icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/project/entry/src/main/resources/base/media/icon.png" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,12 +21,16 @@
   "associatedIndex": 4
 }]]></component>
   <component name="ProjectId" id="2hDy76Kca3MjLfeUk0vQnxlxeui" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
@@ -73,6 +81,7 @@
     </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用级" UseSingleDictionary="true" transferred="true" />
+<<<<<<< HEAD
   <component name="TaskManager">
     <task active="true" id="Default" summary="默认任务">
       <changelist id="811334d0-ee7e-4850-8e48-93beeca61439" name="更改" comment="" />
@@ -82,5 +91,20 @@
       <updated>1717290422189</updated>
     </task>
     <servers />
+=======
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="JavaScript">
+          <url>file://$PROJECT_DIR$/E_Consumer_Behavior_System PJ/entry/src/main/ets/pages/logon.ets</url>
+          <line>21</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+>>>>>>> de2a26d82108d955c9afa5bf5f383f76480b3d56
   </component>
 </project>
