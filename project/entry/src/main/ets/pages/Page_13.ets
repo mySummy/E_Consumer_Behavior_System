@@ -1,25 +1,51 @@
 import router from '@ohos.router';
 @Entry
 @Component
-struct Page_12 {
-  @State message: string = 'Hello World'
-
+struct Page_13 {
+  @State value: number = 0
+  @State total: number = 100
+  onLoadComplete() {
+    // 跳转到另一个页面
+    router.pushUrl({
+      url: 'pages/Page_14'
+    }, router.RouterMode.Single,
+      err => {
+        if (err) {
+          console.log('路由失败');
+        }
+      }
+    )
+  }
+  startLoading() {
+    let countdown = 0;
+    const intervalId = setInterval(() => {
+      countdown += 1;
+      this.value = countdown;
+      if (this.value === this.total) {
+        this.onLoadComplete();
+        clearInterval(intervalId);
+      }
+    }, 100);
+  }
   build() {
     Row() {
       Column() {
         Progress({
-          value: 10,
-          total: 100,
+          value: this.value,
+          total: this.total,
           type: ProgressType.Ring
         })
         Text('数据加载中')
           .fontSize(30)
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.Gray)
-
+          .margin({top:50})
       }
       .width('100%')
     }
     .height('100%')
+    .onAppear(() => {
+      this.startLoading();
+    })
   }
 }

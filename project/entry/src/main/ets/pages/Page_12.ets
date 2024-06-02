@@ -26,6 +26,18 @@ struct Page {
             .backgroundColor(Color.White)
             .borderWidth(1)
             .borderColor(Color.Black)
+            .onClick(()=>{
+              router.pushUrl({
+                url:'pages/Page_13',
+                params:{id:1}
+              },router.RouterMode.Single,
+                err => {
+                  if(err){
+                    console.log('路由失败')
+                  }
+                }
+              )
+            })
           Text('请上传xls/xlsx文件，大小在60M以内')
             .fontColor(Color.Gray)
             .fontSize(15)

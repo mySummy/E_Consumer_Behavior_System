@@ -1,7 +1,7 @@
 import router from '@ohos.router';
 @Entry
 @Component
-struct Page_13 {
+struct Page_14 {
   @State message: string = 'Hello World'
 
   build() {
@@ -11,7 +11,7 @@ struct Page_13 {
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
             .onClick(()=>{
-              router.back()
+              router.back({url:"pages/Page_11"})
             })
         }.justifyContent(FlexAlign.Start)
         .width('100%')
@@ -42,16 +42,19 @@ struct Page_13 {
             Text('平均缴费次数')
               .fontSize(20)
               .fontWeight(FontWeight.Bold)
+              .margin({top:50})
             Text('514')
               .fontSize(20)
               .fontWeight(FontWeight.Bold)
               .fontColor(Color.Yellow)}
+              .margin({top:50})
           Button('预测高价值TOP5')
             .type(ButtonType.Normal)
             .width(125)
             .height(100)
             .borderRadius(10)
             .backgroundColor(Color.Red)
+            .margin({top:50})
         }.justifyContent(FlexAlign.SpaceAround)
         .width('100%')
         Button('重新上传')
@@ -61,6 +64,9 @@ struct Page_13 {
           .borderRadius(10)
           .backgroundColor(Color.Blue)
           .margin({top:20})
+          .onClick(()=>{
+            router.back({url:"pages/Page_12"})
+          })
       }
       .width('100%')
       .height('100%')
