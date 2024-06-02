@@ -1,4 +1,5 @@
 import router from '@ohos.router';
+import Prompt from '@system.prompt';
 @Entry
 @Component
 struct Forget {
@@ -52,17 +53,31 @@ struct Forget {
           .width(300)
           .height(40)
           .onClick(()=>{
-            router.pushUrl({
-              url:'pages/syscode',
-              params:{id : 1}
-            },
-              router.RouterMode.Single,
-              err=>{
-                if(err){
-                  console.log('路由失败.')
+            if (this.username==='') {
+              console.log(this.username);
+              Prompt.showDialog({
+                message: "请输入手机号",
+              });
+            }
+            else if(this.username.length!=11){
+              console.log(this.username);
+              Prompt.showDialog({
+                message: "请输入正确的手机号",
+              });
+            }
+            else{
+              router.pushUrl({
+                url:'pages/syscode',
+                params:{username:this.username}
+              },
+                router.RouterMode.Single,
+                err=>{
+                  if(err){
+                    console.log('路由失败.')
+                  }
                 }
-              }
-            )
+              )
+            }
           })
           .margin({
             top:'80vp'

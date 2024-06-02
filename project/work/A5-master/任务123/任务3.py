@@ -105,7 +105,8 @@ for i in unstable:
 ####################################### 预测值的处理 #######################################
 # 按照预测平均用电量降序排序
 power = sorted(power_dict.items(), key=lambda x: x[1], reverse=True)
-with open("E:/桌面/大学实践数据/中软实习/工作记录/A5-master/任务123/居民客户的用电缴费习惯分析3.csv", mode='w', encoding='gbk', newline='') as f:
+with open("E:/桌面/大学实践数据/中软实习/工作记录/A5-master/任务123/居民客户的用电缴费习惯分析3.csv", mode='w',
+          encoding='gbk', newline='') as f:
     csvwriter = csv.writer(f)
     csvwriter.writerow(["用户编号top5", "预测用电量"])
     for i in range(5):

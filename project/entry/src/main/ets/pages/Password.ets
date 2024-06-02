@@ -3,7 +3,7 @@ import Prompt from '@system.prompt';
 @Entry
 @Component
 struct Password {
-  @State params: any = router.getParams()
+  @State username: string = router.getParams()['username']
   @State pwd1:string = ''
   @State pwd2:string = ''
   build() {
@@ -40,10 +40,19 @@ struct Password {
             left:'30vp'
           })
           .width('100%')
+        Text('密码请设置为6-16位数')
+          .textAlign(TextAlign.Start)
+          .fontColor(Color.Gray)
+          .fontSize(16)
+          .margin({
+            top:'30vp',
+            left:'30vp'
+          })
+          .width('100%')
         TextInput({ placeholder: ('请输入密码') })
           .type(InputType.Password)
           .margin({
-            top:'80vp'
+            top:'50vp'
           })
           .onChange(val=>{
             this.pwd1 = val
@@ -70,10 +79,19 @@ struct Password {
           })
           .backgroundColor(Color.Green)
           .onClick(()=>{
-            if (this.pwd1 != this.pwd2) {
+
+            if(this.pwd1.length < 6 || this.pwd1.length > 16){
+              Prompt.showDialog({
+                message: "请输入正确格式的密码",
+              });
+            }
+            else if (this.pwd1 != this.pwd2) {
               Prompt.showDialog({
                 message: "两次密码不一致",
               });
+
+            }
+            else{
 
             }
           })

@@ -3,9 +3,9 @@ import router from '@ohos.router';
 @Component
 
 struct Syscode {
-  @State params: any = router.getParams()
   @State Codes:string = '点击发送验证码'
   @State code:string = ''
+  @State username:string= router.getParams()['username']
   startCountdown() {
     let countdown = 60;
     const intervalId = setInterval(() => {
@@ -42,7 +42,7 @@ struct Syscode {
             left:'30vp'
           })
           .width('100%')
-        Text('验证码已发送至 phone')
+        Text('验证码已发送至 +86 ' + this.username)
           .textAlign(TextAlign.Start)
           .fontColor(Color.Gray)
           .fontSize(18)
@@ -80,7 +80,7 @@ struct Syscode {
           .onClick(()=>{
             router.pushUrl({
               url:'pages/Password',
-              params:{id : 1}
+              params:{username:this.username}
             },
               router.RouterMode.Single,
               err=>{

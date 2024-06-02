@@ -54,15 +54,22 @@ struct Register {
             .width(300)
             .height(40)
             .onClick(()=>{
-              if (!this.allow) {
+              if (this.username==='') {
+                console.log(this.username);
                 Prompt.showDialog({
-                  message: "请勾选允许登录选项",
+                  message: "请输入手机号",
+                });
+              }
+              else if(this.username.length!=11){
+                console.log(this.username);
+                Prompt.showDialog({
+                  message: "请输入正确的手机号",
                 });
               }
               else{
                 router.pushUrl({
                 url:'pages/syscode',
-                params:{id : 1}
+                params:{username:this.username}
               },
                 router.RouterMode.Single,
                 err=>{
@@ -78,18 +85,7 @@ struct Register {
             })
             .backgroundColor(Color.Green)
           Row(){
-            Checkbox({name:'agreement'})
-              .selectedColor(Color.Green)
-              .onChange(val => {
-                this.allow = val;
-                console.log('agreement change is ' + val);
-                console.log('this is ' + this);
-                console.log('allow is ' + this.allow);
-              })
-              .margin({
-                top:'30vp'
-              })
-            Text('我已阅读并同意')
+            Text('点击注册则代表已阅读并同意')
               .fontColor(Color.Gray)
               .fontSize(12)
               .margin({

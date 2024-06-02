@@ -1,8 +1,8 @@
 import router from '@ohos.router';
+import Prompt from '@system.prompt';
 @Entry
 @Component
 struct Logon {
-  @State message: string = 'Hello World'
   @State username: string = ''
   @State pwd: string = ''
   build() {
@@ -101,6 +101,23 @@ struct Logon {
             top:'100vp'
           })
           .backgroundColor(Color.Green)
+          .onClick(()=>{
+            if (this.username==='') {
+              console.log(this.username);
+              Prompt.showDialog({
+                message: "请输入手机号",
+              });
+            }
+            else if(this.pwd){
+              console.log(this.pwd);
+              Prompt.showDialog({
+                message: "请输入密码",
+              });
+            }
+            else{
+
+            }
+          })
 
 
       }
