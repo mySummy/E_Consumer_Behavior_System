@@ -26,6 +26,19 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
+// 检查用户名是否存在
+app.post('/check-username', async (req, res) => {
+    const { username } = req.body;
+
+    try {
+        const user = await User.findOne({ username });
+        res.status(200).json({ exists: !!user });
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
 // 注册用户
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
