@@ -131,9 +131,9 @@ struct Logon {
                 if (data.responseCode === 200 && response.message === 'Login successful') {
                   // 登录成功，进行相应的操作
                   console.log('登录成功');
+                  router.clear();
                   router.pushUrl({
-                    url: 'pages/syscode', // 主页页面
-                    params: { id: 1 }
+                    url: 'pages/Page_11', // 主页页面
                   },
                     router.RouterMode.Single,
                     err => {
