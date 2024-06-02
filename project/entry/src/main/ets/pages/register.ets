@@ -9,7 +9,8 @@ struct Register {
     // 跳转到另一个页面
     router.pushUrl({
       url: 'pages/Password',
-      params:{username:this.username}
+      params:{username:this.username,
+              mode:1}
     }, router.RouterMode.Single,
       err => {
         if (err) {
@@ -27,15 +28,7 @@ struct Register {
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.Gray)
           .onClick(() => {
-            router.clear();
-            router.pushUrl({
-              url: 'pages/Page_1',
-              params: { id: 1 }
-            }, router.RouterMode.Single, err => {
-              if (err) {
-                console.log('路由失败');
-              }
-            });
+            router.back({url:'pages/logon'})
           })
           .margin({
             top: '30vp',

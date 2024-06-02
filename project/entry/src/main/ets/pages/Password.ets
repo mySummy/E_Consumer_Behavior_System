@@ -5,6 +5,7 @@ import http from '@ohos.net.http';
 @Component
 struct Password {
   @State username: string = router.getParams()['username']
+  @State mode:number = router.getParams()['mode']
   @State pwd1:string = ''
   @State pwd2:string = ''
   build() {
@@ -16,7 +17,10 @@ struct Password {
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.Gray)
           .onClick(()=>{
-            router.back()
+            router.showAlertBeforeBackPage({
+              message:'确定要返回吗？'
+            })
+            router.back({url:'pages/logon'})
           })
           .margin({
             top:'40vp',
@@ -92,7 +96,7 @@ struct Password {
               });
 
             }
-            else{
+            else if(this.mode===1){
               const httpRequest = http.createHttp();
               httpRequest.request(
                 'http://localhost:3000/register', // URL should be a string
@@ -124,6 +128,9 @@ struct Password {
                   message: '网络错误: ' + err,
                 });
               });
+            }
+            else{
+              
             }
           })
 

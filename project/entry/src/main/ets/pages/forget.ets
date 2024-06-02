@@ -62,7 +62,7 @@ struct Forget {
             else{
               router.pushUrl({
                 url:'pages/Password',
-                params:{username:this.username}
+                params:{username:this.username,mode:0}
               },
                 router.RouterMode.Single,
                 err=>{
