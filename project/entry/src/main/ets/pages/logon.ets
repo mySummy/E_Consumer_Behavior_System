@@ -38,7 +38,7 @@ struct Logon {
         Text('欢迎使用 电力客户分析')
           .fontSize(16)
           .fontColor(Color.Gray)
-        TextInput({ placeholder:('输入手机号')})
+        TextInput({ placeholder:('输入账号')})
           .type(InputType.PhoneNumber)
           .margin({
             top:'30vp'
@@ -109,7 +109,7 @@ struct Logon {
           .onClick(()=>{
             if (this.username === '') {
               Prompt.showDialog({
-                message: "请输入手机号",
+                message: "请输入账号",
               });
             } else if (this.pwd === '') {
               Prompt.showDialog({

@@ -30,7 +30,7 @@ struct Forget {
             left:'30vp'
           })
           .width('100%')
-        Text('请输入手机号')
+        Text('请输入账号')
           .textAlign(TextAlign.Start)
           .fontColor(Color.Gray)
           .fontSize(18)
@@ -39,7 +39,7 @@ struct Forget {
             left:'50vp'
           })
           .width('100%')
-        TextInput({ placeholder: ('手机号') })
+        TextInput({ placeholder: ('账号') })
           .type(InputType.PhoneNumber)
           .margin({
             top:'60vp'
@@ -49,14 +49,14 @@ struct Forget {
             console.log(val)
           })
           .width('80%')
-        Button('验证手机号')
+        Button('验证账号')
           .width(300)
           .height(40)
           .onClick(()=>{
             if (this.username==='') {
               console.log(this.username);
               Prompt.showDialog({
-                message: "请输入手机号",
+                message: "请输入账号",
               });
             }
             else{

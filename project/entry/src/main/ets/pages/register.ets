@@ -31,7 +31,7 @@ struct Register {
             router.back({url:'pages/logon'})
           })
           .margin({
-            top: '30vp',
+            top: '40vp',
             left: '30vp'
           })
           .width('100%');
@@ -50,7 +50,7 @@ struct Register {
         Text('欢迎使用 电力客户分析')
           .fontSize(16)
           .fontColor(Color.Gray);
-        TextInput({ placeholder: '输入手机号' })
+        TextInput({ placeholder: '输入账号' })
           .type(InputType.PhoneNumber)
           .margin({
             top: '30vp'
@@ -70,7 +70,7 @@ struct Register {
           .onClick(() => {
             if (this.username === '') {
               Prompt.showDialog({
-                message: '请输入手机号',
+                message: '请输入账号',
               });
             }
             else {
@@ -80,6 +80,6 @@ struct Register {
       }
       .width('100%');
     }
-    .height('80%');
+    .height('60%');
   }
 }
