@@ -1,106 +1,132 @@
 import router from '@ohos.router';
 import Prompt from '@system.prompt';
+import http from '@ohos.net.http';
+
 @Entry
 @Component
 struct Register {
-  @State params: any = router.getParams()
-  @State allow: Boolean = false
-  @State username: string =''
-  build(){
-      Row(){
-        Column(){
-          Text('< 返回')
-            .textAlign(TextAlign.Start)
-            .fontSize(16)
-            .fontWeight(FontWeight.Bold)
-            .fontColor(Color.Gray)
-            .onClick(()=>{
-              router.back()
-            })
-            .margin({
-              top:'40vp',
-              left:'30vp'
-            })
-            .width('100%')
-          Text('注册账户')
-            .textAlign(TextAlign.Start)
-            .fontSize(30)
-            .fontWeight(FontWeight.Bold)
-            .margin({
-              top:'120vp',
-              left:'30vp'
-            })
-            .width('100%')
-          Text('请输入手机号')
-            .textAlign(TextAlign.Start)
-            .fontColor(Color.Gray)
-            .fontSize(18)
-            .margin({
-              top:'30vp',
-              left:'50vp'
-            })
-            .width('100%')
-          TextInput({ placeholder: ('手机号') })
-            .type(InputType.PhoneNumber)
-            .margin({
-              top:'60vp'
-            })
-            .onChange(val=>{
-              this.username = val
-              console.log(val)
-            })
-            .width('80%')
-          Button('同意协议并注册')
-            .width(300)
-            .height(40)
-            .onClick(()=>{
-              if (this.username==='') {
-                console.log(this.username);
-                Prompt.showDialog({
-                  message: "请输入手机号",
-                });
+  @State username: string = '';
+  @State pwd: string = '';
+
+  build() {
+    Row() {
+      Column() {
+        Text('< 返回')
+          .textAlign(TextAlign.Start)
+          .fontSize(16)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(Color.Gray)
+          .onClick(() => {
+            router.clear();
+            router.pushUrl({
+              url: 'pages/Page_1',
+              params: { id: 1 }
+            }, router.RouterMode.Single, err => {
+              if (err) {
+                console.log('路由失败');
               }
-              else if(this.username.length!=11){
-                console.log(this.username);
-                Prompt.showDialog({
-                  message: "请输入正确的手机号",
-                });
-              }
-              else{
-                router.pushUrl({
-                url:'pages/syscode',
-                params:{username:this.username}
-              },
-                router.RouterMode.Single,
-                err=>{
-                  if(err){
-                    console.log('路由失败.')
-                  }
+            });
+          })
+          .margin({
+            top: '30vp',
+            left: '30vp'
+          })
+          .width('100%');
+
+        Image($r('app.media.app_icon'))
+          .width(100)
+          .height(100)
+          .margin({
+            top: '70vp',
+            bottom: '9vp'
+          });
+        Text('注册界面')
+          .fontSize(24)
+          .fontWeight(FontWeight.Bold)
+          .margin(10);
+        Text('欢迎使用 电力客户分析')
+          .fontSize(16)
+          .fontColor(Color.Gray);
+        TextInput({ placeholder: '输入手机号' })
+          .type(InputType.PhoneNumber)
+          .margin({
+            top: '30vp'
+          })
+          .onChange(val => {
+            this.username = val;
+            console.log(val);
+          })
+          .width('95%');
+        TextInput({ placeholder: '输入密码' })
+          .type(InputType.Password)
+          .margin({
+            top: '20vp'
+          })
+          .width('95%')
+          .onChange(val => {
+            this.pwd = val;
+            console.log(val);
+          });
+        Button('注册')
+          .width(300)
+          .height(40)
+          .margin({
+            top: '100vp'
+          })
+          .backgroundColor(Color.Green)
+          .onClick(() => {
+            if (this.username === '') {
+              Prompt.showDialog({
+                message: '请输入手机号',
+              });
+            } else if (this.pwd === '') {
+              Prompt.showDialog({
+                message: '请输入密码',
+              });
+            } else {
+              const httpRequest = http.createHttp();
+              httpRequest.request(
+                'http://localhost:3000/register', // URL should be a string
+                {
+                  method: http.RequestMethod.POST, // 使用正确的枚举类型
+                  header: { 'Content-Type': 'application/json' },
+                  extraData: JSON.stringify({
+                    username: this.username,
+                    password: this.pwd
+                  }),
+                  readTimeout: 60000, // 超时时间
+                  connectTimeout: 60000 // 超时时间
                 }
-              )
-              }
-            })
-            .margin({
-              top:'80vp'
-            })
-            .backgroundColor(Color.Green)
-          Row(){
-            Text('点击注册则代表已阅读并同意')
-              .fontColor(Color.Gray)
-              .fontSize(12)
-              .margin({
-                top:'30vp',
-                left:'20vp'
-              })
-            Text('《电力用户分析软件服务协议》')
-              .fontColor(Color.Green)
-              .fontSize(12)
-              .margin({
-                top:'30vp',
-                left:'5vp'
-              })
-          }
-        }
+              ).then((data) => {
+                const response = JSON.parse(data.result as string); // 确保 result 是字符串类型
+                if (data.responseCode === 201 && response.message === 'User registered successfully') {
+                  // 注册成功，进行相应的操作
+                  console.log('注册成功');
+                  router.clear();
+                  router.pushUrl({
+                    url: 'pages/Page_1', // 注册后返回登录页面
+                  }, router.RouterMode.Single, err => {
+                    if (err) {
+                      console.log('路由失败.');
+                    }
+                  });
+                } else {
+                  // 注册失败，显示错误信息
+                  Prompt.showDialog({
+                    message: '注册失败: ' + response.message,
+                  });
+                }
+              }).catch((err) => {
+                // 网络错误或其他错误
+                Prompt.showDialog({
+                  message: '网络错误: ' + err,
+                });
+              });
+            }
+          });
       }
+      .width('100%');
+    }
+    .height('80%');
   }
 }
