@@ -4,7 +4,7 @@ import router from '@ohos.router';
 struct Page {
   @State money: number = 0.0;
   @State frequency: number = 0.0;
-
+  @State message: string = '分析-上传'
   build() {
       Column() {
         Row(){
@@ -13,6 +13,10 @@ struct Page {
           .fontWeight(FontWeight.Bold)
           .onClick(()=>{
             router.back()
+          })
+          .margin({
+            top:'40vp',
+            left:'10vp'
           })
         }.justifyContent(FlexAlign.Start)
         .width('100%')
@@ -41,7 +45,7 @@ struct Page {
           Text('请上传xls/xlsx文件，大小在60M以内')
             .fontColor(Color.Gray)
             .fontSize(15)
-            .margin({top:25})
+            .margin({top:30})
         }.margin({top:220})
         Column(){
           Text('评判标准-自定义')

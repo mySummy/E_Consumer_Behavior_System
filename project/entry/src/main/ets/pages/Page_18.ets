@@ -2,7 +2,7 @@ import router from '@ohos.router';
 @Entry
 @Component
 struct Page_18 {
-  @State message: string = 'Hello World'
+  @State message: string = '任务4/5 上传'
 
   build() {
     Column() {
@@ -12,6 +12,10 @@ struct Page_18 {
           .fontWeight(FontWeight.Bold)
           .onClick(()=>{
             router.back()
+          })
+          .margin({
+            top:'40vp',
+            left:'10vp'
           })
       }
       .width('100%')
@@ -28,6 +32,7 @@ struct Page_18 {
         Text('请上传xls/xlsx文件，大小在60M以内')
           .fontColor(Color.Gray)
           .fontSize(15)
+          .margin({top:30})
       }.margin({top:300})
     }
     .height('100%')

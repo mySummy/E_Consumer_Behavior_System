@@ -4,6 +4,7 @@ import router from '@ohos.router';
 struct Page_13 {
   @State value: number = 0
   @State total: number = 100
+  @State message: string = '分析-加载'
   onLoadComplete() {
     // 跳转到另一个页面
     router.pushUrl({

@@ -13,7 +13,7 @@ import router from '@ohos.router';
 @Entry
 @Component
 struct Page_17 {
-  @State message: string = 'Hello World'
+  @State message: string = '历史记录'
   @State private files:Array<file> = [
     new file('9999','2024.05.29','居民用电归类'),    new file('0001','2024.05.29','居民用电归类'),
     new file('0001','2024.05.29','居民用电归类'),    new file('0001','2024.05.29','居民用电归类'),
@@ -36,6 +36,10 @@ struct Page_17 {
           .fontWeight(FontWeight.Bold)
           .onClick(()=>{
             router.back()
+          })
+          .margin({
+            top:'40vp',
+            left:'10vp'
           })
       }.justifyContent(FlexAlign.Start)
       .width('100%')

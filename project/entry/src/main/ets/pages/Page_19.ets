@@ -13,6 +13,10 @@ struct Page_19 {
           .onClick(()=>{
             router.back()
           })
+          .margin({
+            top:'40vp',
+            left:'10vp'
+          })
       }
       .width('100%')
       Column(){
@@ -28,6 +32,7 @@ struct Page_19 {
         Text('请上传xls/xlsx文件，大小在60M以内')
           .fontColor(Color.Gray)
           .fontSize(15)
+          .margin({top:30})
       }.margin({top:300})
     }
     .height('100%')

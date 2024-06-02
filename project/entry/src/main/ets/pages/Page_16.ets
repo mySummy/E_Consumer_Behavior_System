@@ -12,7 +12,7 @@ class customer {
 @Entry
 @Component
 struct Page_16 {
-  @State message: string = 'Hello World'
+  @State message: string = 'TOP 5'
   private customers:Array<customer> = [
     new customer('田所浩二',99,1),
     new customer('田所浩二',98,2),
@@ -28,6 +28,10 @@ struct Page_16 {
             .fontWeight(FontWeight.Bold)
             .onClick(()=>{
               router.back()
+            })
+            .margin({
+              top:'40vp',
+              left:'10vp'
             })
         }.justifyContent(FlexAlign.Start)
         .width('100%')

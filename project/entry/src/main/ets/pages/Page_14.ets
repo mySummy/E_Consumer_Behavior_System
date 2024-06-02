@@ -2,7 +2,7 @@ import router from '@ohos.router';
 @Entry
 @Component
 struct Page_14 {
-  @State message: string = 'Hello World'
+  @State message: string = '分析-主界面'
 
   build() {
       Column() {
@@ -13,13 +13,18 @@ struct Page_14 {
             .onClick(()=>{
               router.back({url:"pages/Page_11"})
             })
+            .margin({
+              top:'40vp',
+              left:'10vp'
+            })
         }.justifyContent(FlexAlign.Start)
         .width('100%')
         Row(){
           Text('全部数据')
             .fontSize(30)
             .fontWeight(FontWeight.Bold)
-        }.margin({right:100})
+        }.margin({right:180,
+                  top:50  })
         Row(){
           Column(){
             Text('平均缴费金额')
@@ -29,12 +34,14 @@ struct Page_14 {
               .fontSize(20)
               .fontWeight(FontWeight.Bold)
               .fontColor(Color.Yellow)}
+              .margin({top:50})
           Button('所有用户类型')
             .type(ButtonType.Normal)
             .width(125)
             .height(100)
             .borderRadius(10)
             .backgroundColor(Color.Green)
+            .margin({top:50})
         }.justifyContent(FlexAlign.SpaceAround)
         .width('100%')
         Row(){
@@ -42,7 +49,6 @@ struct Page_14 {
             Text('平均缴费次数')
               .fontSize(20)
               .fontWeight(FontWeight.Bold)
-              .margin({top:50})
             Text('514')
               .fontSize(20)
               .fontWeight(FontWeight.Bold)
@@ -63,7 +69,7 @@ struct Page_14 {
           .height(50)
           .borderRadius(10)
           .backgroundColor(Color.Blue)
-          .margin({top:20})
+          .margin({top:80})
           .onClick(()=>{
             router.back({url:"pages/Page_12"})
           })
