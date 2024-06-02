@@ -1,5 +1,6 @@
 import router from '@ohos.router';
 import Prompt from '@system.prompt';
+import http from '@ohos.net.http';
 @Entry
 @Component
 struct Password {
@@ -92,7 +93,37 @@ struct Password {
 
             }
             else{
-
+              const httpRequest = http.createHttp();
+              httpRequest.request(
+                'http://localhost:3000/register', // URL should be a string
+                {
+                  method: http.RequestMethod.POST, // 使用正确的枚举类型
+                  header: { 'Content-Type': 'application/json' },
+                  extraData: JSON.stringify({
+                    username: this.username,
+                    password: this.pwd1
+                  }),
+                  readTimeout: 60000, // 超时时间
+                  connectTimeout: 60000 // 超时时间
+                }
+              ).then((data) => {
+                const response = JSON.parse(data.result as string); // 确保 result 是字符串类型
+                if (data.responseCode === 201 && response.message === 'User registered successfully') {
+                  // 注册成功，进行相应的操作
+                  console.log('注册成功');
+                  router.back({url:'pages/logon'})
+                } else {
+                  // 注册失败，显示错误信息
+                  Prompt.showDialog({
+                    message: '注册失败: ' + response.message,
+                  });
+                }
+              }).catch((err) => {
+                // 网络错误或其他错误
+                Prompt.showDialog({
+                  message: '网络错误: ' + err,
+                });
+              });
             }
           })
 

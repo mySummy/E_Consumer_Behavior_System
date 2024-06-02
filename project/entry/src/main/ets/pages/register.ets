@@ -1,13 +1,23 @@
 import router from '@ohos.router';
 import Prompt from '@system.prompt';
-import http from '@ohos.net.http';
 
 @Entry
 @Component
 struct Register {
   @State username: string = '';
-  @State pwd: string = '';
-
+  onLoadComplete() {
+    // 跳转到另一个页面
+    router.pushUrl({
+      url: 'pages/Password',
+      params:{username:this.username}
+    }, router.RouterMode.Single,
+      err => {
+        if (err) {
+          console.log('路由失败');
+        }
+      }
+    )
+  }
   build() {
     Row() {
       Column() {
@@ -57,16 +67,6 @@ struct Register {
             console.log(val);
           })
           .width('95%');
-        TextInput({ placeholder: '输入密码' })
-          .type(InputType.Password)
-          .margin({
-            top: '20vp'
-          })
-          .width('95%')
-          .onChange(val => {
-            this.pwd = val;
-            console.log(val);
-          });
         Button('注册')
           .width(300)
           .height(40)
@@ -79,49 +79,9 @@ struct Register {
               Prompt.showDialog({
                 message: '请输入手机号',
               });
-            } else if (this.pwd === '') {
-              Prompt.showDialog({
-                message: '请输入密码',
-              });
-            } else {
-              const httpRequest = http.createHttp();
-              httpRequest.request(
-                'http://localhost:3000/register', // URL should be a string
-                {
-                  method: http.RequestMethod.POST, // 使用正确的枚举类型
-                  header: { 'Content-Type': 'application/json' },
-                  extraData: JSON.stringify({
-                    username: this.username,
-                    password: this.pwd
-                  }),
-                  readTimeout: 60000, // 超时时间
-                  connectTimeout: 60000 // 超时时间
-                }
-              ).then((data) => {
-                const response = JSON.parse(data.result as string); // 确保 result 是字符串类型
-                if (data.responseCode === 201 && response.message === 'User registered successfully') {
-                  // 注册成功，进行相应的操作
-                  console.log('注册成功');
-                  router.clear();
-                  router.pushUrl({
-                    url: 'pages/Page_1', // 注册后返回登录页面
-                  }, router.RouterMode.Single, err => {
-                    if (err) {
-                      console.log('路由失败.');
-                    }
-                  });
-                } else {
-                  // 注册失败，显示错误信息
-                  Prompt.showDialog({
-                    message: '注册失败: ' + response.message,
-                  });
-                }
-              }).catch((err) => {
-                // 网络错误或其他错误
-                Prompt.showDialog({
-                  message: '网络错误: ' + err,
-                });
-              });
+            }
+            else {
+            this.onLoadComplete();
             }
           });
       }

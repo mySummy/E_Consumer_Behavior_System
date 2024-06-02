@@ -16,17 +16,7 @@ struct Logon {
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.Gray)
           .onClick(()=>{
-            router.clear();
-            router.pushUrl({
-              url:'pages/Page_1',
-              params:{id:1}
-            },router.RouterMode.Single,
-              err => {
-                if(err){
-                  console.log('路由失败')
-                }
-              }
-            )
+            router.back({url:'pages/Pages_1'})
           })
           .margin({
             top:'30vp',

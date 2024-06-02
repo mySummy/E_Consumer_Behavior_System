@@ -59,15 +59,9 @@ struct Forget {
                 message: "请输入手机号",
               });
             }
-            else if(this.username.length!=11){
-              console.log(this.username);
-              Prompt.showDialog({
-                message: "请输入正确的手机号",
-              });
-            }
             else{
               router.pushUrl({
-                url:'pages/syscode',
+                url:'pages/Password',
                 params:{username:this.username}
               },
                 router.RouterMode.Single,
