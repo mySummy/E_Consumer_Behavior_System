@@ -3,13 +3,13 @@ import router from '@ohos.router';
 @Component
 struct Index {
   @State message: string = '主界面'
-  @State username: string = router.getParams()['username']
+  //@State username: string = router.getParams()['username']
   build() {
       Column({space:10}) {
         Column() {
           Image($r('app.media.head'))
             .width(100)
-          Text(this.username)
+          Text(this.message)
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
             .margin({top:10})
