@@ -83,31 +83,36 @@ struct Password {
             } else if (this.mode === 1) {
               const httpRequest = http.createHttp();
               httpRequest.request(
-                'http://localhost:3000/register', // URL should be a string
+                'http://localhost:3000/register',
                 {
-                  method: http.RequestMethod.POST, // 使用正确的枚举类型
+                  method: http.RequestMethod.POST,
                   header: { 'Content-Type': 'application/json' },
                   extraData: JSON.stringify({
                     username: this.username,
                     password: this.pwd1
                   }),
-                  readTimeout: 60000, // 超时时间
-                  connectTimeout: 60000 // 超时时间
+                  readTimeout: 60000,
+                  connectTimeout: 60000
                 }
               ).then((data) => {
-                const response = JSON.parse(data.result as string); // 确保 result 是字符串类型
-                if (data.responseCode === 201 && response.message === 'User registered successfully') {
-                  // 注册成功，进行相应的操作
-                  console.log('注册成功');
-                  router.back({ url: 'pages/logon' })
-                } else {
-                  // 注册失败，显示错误信息
+                console.log('Response data:', data.result);
+                try {
+                  const response = JSON.parse(data.result.toString());
+                  if (data.responseCode === 201 && response.message === 'User registered successfully') {
+                    console.log('注册成功');
+                    router.back({ url: 'pages/logon' })
+                  } else {
+                    Prompt.showDialog({
+                      message: '注册失败: ' + response.message,
+                    });
+                  }
+                } catch (e) {
+                  console.error('JSON parsing error:', e, 'Response data:', data.result);
                   Prompt.showDialog({
-                    message: '注册失败: ' + response.message,
+                    message: 'JSON解析错误: ' + e.message,
                   });
                 }
               }).catch((err) => {
-                // 网络错误或其他错误
                 Prompt.showDialog({
                   message: '网络错误: ' + err,
                 });
@@ -115,31 +120,36 @@ struct Password {
             } else {
               const httpRequest = http.createHttp();
               httpRequest.request(
-                'http://localhost:3000/forget', // 遗忘密码端点
+                'http://localhost:3000/forget',
                 {
-                  method: http.RequestMethod.POST, // 使用正确的枚举类型
+                  method: http.RequestMethod.POST,
                   header: { 'Content-Type': 'application/json' },
                   extraData: JSON.stringify({
                     username: this.username,
                     newPassword: this.pwd1
                   }),
-                  readTimeout: 60000, // 超时时间
-                  connectTimeout: 60000 // 超时时间
+                  readTimeout: 60000,
+                  connectTimeout: 60000
                 }
               ).then((data) => {
-                const response = JSON.parse(data.result as string); // 确保 result 是字符串类型
-                if (data.responseCode === 200 && response.message === 'Password reset successfully') {
-                  // 重置密码成功，进行相应的操作
-                  console.log('重置密码成功');
-                  router.back({ url: 'pages/logon' })
-                } else {
-                  // 重置密码失败，显示错误信息
+                console.log('Response data:', data.result);
+                try {
+                  const response = JSON.parse(data.result.toString());
+                  if (data.responseCode === 200 && response.message === 'Password reset successfully') {
+                    console.log('重置密码成功');
+                    router.back({ url: 'pages/logon' })
+                  } else {
+                    Prompt.showDialog({
+                      message: '重置密码失败: ' + response.message,
+                    });
+                  }
+                } catch (e) {
+                  console.error('JSON parsing error:', e, 'Response data:', data.result);
                   Prompt.showDialog({
-                    message: '重置密码失败: ' + response.message,
+                    message: 'JSON解析错误: ' + e.message,
                   });
                 }
               }).catch((err) => {
-                // 网络错误或其他错误
                 Prompt.showDialog({
                   message: '网络错误: ' + err,
                 });

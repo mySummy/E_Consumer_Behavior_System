@@ -10,8 +10,6 @@ app.use(bodyParser.json());
 
 // 连接到MongoDB
 mongoose.connect('mongodb://localhost:27017/mydatabase', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
 }).then(() => {
     console.log('Connected to MongoDB');
 }).catch(err => {
@@ -23,6 +21,10 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true }
 });
+
+const PaymentHabit = mongoose.model('PaymentHabit', new mongoose.Schema({}, { strict: false }));
+const CustomerType = mongoose.model('CustomerType', new mongoose.Schema({}, { strict: false }));
+const PredictedUsage = mongoose.model('PredictedUsage', new mongoose.Schema({}, { strict: false }));
 
 const User = mongoose.model('User', userSchema);
 
@@ -73,6 +75,41 @@ app.post('/login', async (req, res) => {
         console.error('Error logging in', err);
         res.status(500).json({ message: 'Internal server error' });
     }
+});
+
+// 获取平均缴费次数与平均缴费金额
+app.get('/payment-habits', async (req, res) => {
+    try {
+        const paymentHabits = await PaymentHabit.find();
+        res.status(200).json(paymentHabits);
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// 获取用户编号与客户类型
+app.get('/customer-types', async (req, res) => {
+    try {
+        const customerTypes = await CustomerType.find();
+        res.status(200).json(customerTypes);
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// 获取用户编号与预测用电量
+app.get('/predicted-usage', async (req, res) => {
+    try {
+        const predictedUsage = await PredictedUsage.find();
+        res.status(200).json(predictedUsage);
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// 处理根路径
+app.get('/', (req, res) => {
+    res.send('Welcome to the homepage!');
 });
 
 // 启动服务器
