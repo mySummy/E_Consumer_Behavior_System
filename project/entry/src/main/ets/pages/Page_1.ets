@@ -1,7 +1,7 @@
 import router from '@ohos.router';
 @Entry
 @Component
-struct Page1 {
+struct Page_1 {
   @State message: string = '使用前请登录'
 
   build() {

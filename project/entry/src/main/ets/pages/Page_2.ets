@@ -2,7 +2,7 @@ import router from '@ohos.router';
 
 @Entry
 @Component
-struct Page2 {
+struct Page_2 {
   build() {
     Row() {
       Column() {
