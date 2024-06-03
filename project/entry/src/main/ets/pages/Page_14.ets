@@ -33,7 +33,7 @@ struct Page_14 {
             Text('114RMB')
               .fontSize(20)
               .fontWeight(FontWeight.Bold)
-              .fontColor(Color.Yellow)}
+              .fontColor(Color.Gray)}
               .margin({top:50})
           Button('所有用户类型')
             .type(ButtonType.Normal)
@@ -64,14 +64,14 @@ struct Page_14 {
             Text('514')
               .fontSize(20)
               .fontWeight(FontWeight.Bold)
-              .fontColor(Color.Yellow)}
+              .fontColor(Color.Gray)}
               .margin({top:50})
           Button('预测高价值TOP5')
             .type(ButtonType.Normal)
             .width(125)
             .height(100)
             .borderRadius(10)
-            .backgroundColor(Color.Red)
+            .backgroundColor(Color.Green)
             .margin({top:50})
             .onClick(()=>{
               router.pushUrl({
