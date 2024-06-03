@@ -137,6 +137,7 @@ struct Logon {
                   router.clear();
                   router.pushUrl({
                     url: 'pages/Page_11', // 主页页面
+                    params:{username:this.username}
                   },
                     router.RouterMode.Single,
                     err => {
