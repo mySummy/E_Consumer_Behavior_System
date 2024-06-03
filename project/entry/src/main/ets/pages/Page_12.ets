@@ -1,5 +1,25 @@
+import featureAbility from '@ohos.ability.featureAbility';
 import router from '@ohos.router';
 import picker from '@ohos.file.picker';
+
+async function requestPermissions(): Promise<boolean> {
+  try {
+    let context = featureAbility.getContext();
+    const result = await context.requestPermissionsFromUser(
+      ['ohos.permission.WRITE_USER_STORAGE', 'ohos.permission.READ_USER_STORAGE'],
+      1
+    );
+    console.info('requestPermissionsFromUser data: ' + JSON.stringify(result));
+    // 检查是否所有权限都被授予
+    return result.authResults.every(authResult => authResult === 0);
+  } catch (err) {
+    console.error('Failed to request permissions:', err);
+    return false;
+  }
+}
+
+// 调用请求权限的函数
+
 async function picker_file(): Promise<string | null> {
   try {
     let documentSelectOptions = new picker.DocumentSelectOptions();
@@ -27,7 +47,6 @@ async function picker_file(): Promise<string | null> {
 function isExcelFile(filePath: string): boolean {
   return filePath.endsWith('.xlsx') || filePath.endsWith('.xls');
 }
-
 
 
 @Entry
@@ -63,21 +82,28 @@ struct Page {
             .borderColor(Color.Black)
             .onClick(async () => {
               try {
-                const filePath = await picker_file();
-                if (filePath) {
-                  router.pushUrl({
-                    url: 'pages/Page_13',
-                    params: { id: 1 }
-                  }, router.RouterMode.Single, err => {
-                    if (err) {
-                      console.error('路由失败:', err);
-                    }
-                  });
+                const permissionsGranted = await requestPermissions();
+                if (permissionsGranted) {
+                  const filePath = await picker_file();
+                  if (filePath) {
+                    router.pushUrl({
+                      url: 'pages/Page_13',
+                      params: { id: 1 },
+                    }, router.RouterMode.Single, (err) => {
+                      if (err) {
+                        console.error('路由失败:', err);
+                      }
+                    });
+                  } else {
+                    console.log('选择的文件不是 Excel 文件');
+                  }
+                } else {
+                  console.log('权限请求失败');
                 }
               } catch (err) {
                 console.error('选择文件出错：', err);
               }
-            })
+            });
           Text('请上传xls/xlsx文件，大小在60M以内')
             .fontColor(Color.Gray)
             .fontSize(15)
