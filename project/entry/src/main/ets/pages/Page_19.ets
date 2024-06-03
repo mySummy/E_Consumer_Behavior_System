@@ -75,14 +75,7 @@ struct Page_19 {
             try {
               const filePath = await picker_file();
               if (filePath) {
-                router.pushUrl({
-                  url: 'pages/Page_20',
-                  params: { id: 1 }
-                }, router.RouterMode.Single, err => {
-                  if (err) {
-                    console.error('路由失败:', err);
-                  }
-                });
+                this.onLoadComplete()
               }
             } catch (err) {
               console.error('选择文件出错：', err);
