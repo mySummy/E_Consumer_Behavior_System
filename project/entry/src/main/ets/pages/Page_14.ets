@@ -42,6 +42,18 @@ struct Page_14 {
             .borderRadius(10)
             .backgroundColor(Color.Green)
             .margin({top:50})
+            .onClick(()=>{
+              router.pushUrl({
+                url:'pages/Page_15',
+                params:{id:1}
+              },router.RouterMode.Single,
+                err => {
+                  if(err){
+                    console.log('路由失败')
+                  }
+                }
+              )
+            })
         }.justifyContent(FlexAlign.SpaceAround)
         .width('100%')
         Row(){
@@ -61,6 +73,18 @@ struct Page_14 {
             .borderRadius(10)
             .backgroundColor(Color.Red)
             .margin({top:50})
+            .onClick(()=>{
+              router.pushUrl({
+                url:'pages/Page_16',
+                params:{id:1}
+              },router.RouterMode.Single,
+                err => {
+                  if(err){
+                    console.log('路由失败')
+                  }
+                }
+              )
+            })
         }.justifyContent(FlexAlign.SpaceAround)
         .width('100%')
         Button('重新上传')
