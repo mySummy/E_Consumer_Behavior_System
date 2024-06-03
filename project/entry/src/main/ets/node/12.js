@@ -46,7 +46,7 @@ const csvWriter1 = createCsvWriter({
     ],
 });
 
-    encoding: 'utf-8' // 使用 UTF-8 编码
+    encoding: 'utf-8'
 csvWriter1.writeRecords([{ '平均缴费次数': avg_count, '平均缴费金额': avg_money }])
     .then(() => console.log('居民客户的用电缴费习惯分析1.csv 写入完成'));
 

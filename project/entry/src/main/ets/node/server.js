@@ -1,10 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-
+const xlsx = require('xlsx-populate');
+const { MongoClient } = require('mongodb');
 const app = express();
 const port = 3000;
-
+// mongo运行：
+//"C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath="C:\data\db"
 // 中间件
 app.use(bodyParser.json());
 
@@ -15,6 +17,18 @@ mongoose.connect('mongodb://localhost:27017/mydatabase', {
 }).catch(err => {
     console.error('Failed to connect to MongoDB', err);
 });
+
+// 创建 XLSXData 模型
+const XLSXDataSchema = new mongoose.Schema({
+    // 定义字段和类型
+    snumber: String,//用户编号
+    sdata: Number,//缴费日期
+    amount: Boolean,//缴费金额
+});
+
+// 将模型与集合关联
+const XLSXData = mongoose.model('XLSXData', XLSXDataSchema);
+
 
 // 定义用户模型
 const userSchema = new mongoose.Schema({
@@ -106,6 +120,104 @@ app.get('/predicted-usage', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
+// 调用Python脚本的API端点
+app.get('/analyze', (req, res) => {
+    exec('python 任务3.py', (error, stdout, stderr) => {
+        if (error) {
+            console.error(`exec error: ${error}`);
+            return res.status(500).json({ message: 'Error executing Python script', error: stderr });
+        }
+
+        // 将Python脚本的输出结果解析为JSON对象并返回给客户端
+        const result = JSON.parse(stdout); // 假设stdout是一个JSON字符串
+        res.status(200).json({ message: 'Analysis complete', result: result });
+    });
+});
+
+const { exec } = require('child_process');
+// 处理分析请求
+app.get('/analyze', async (req, res) => {
+    try {
+        // 调用 Python 脚本并处理输出
+        exec('python 任务3.py', (error, stdout, stderr) => {
+            if (error) {
+                console.error(`exec error: ${error}`);
+                res.status(500).json({ message: 'Internal server error' });
+                return;
+            }
+            // 将 Python 脚本的输出发送回客户端
+            const output = JSON.parse(stdout);
+            res.status(200).json(output);
+        });
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
+// 存储 XLSX 文件
+app.post('/save-xlsx', async (req, res) => {
+    const { data } = req.body; // 假设请求的数据位于 req.body.data 中
+
+    try {
+        const workbook = await xlsx.fromBlankAsync();
+        const sheet = workbook.sheet(0);
+
+        // 在第一行中设置表头
+        sheet.cell('A1').value('User Number');
+        sheet.cell('B1').value('Payment Date');
+        sheet.cell('C1').value('Payment Amount');
+
+        // 遍历数据并将其写入单元格
+        data.forEach((item, index) => {
+            const row = index + 2; // 数据从第二行开始写入
+            sheet.cell(`A${row}`).value(item.snumber);
+            sheet.cell(`B${row}`).value(item.sdata);
+            sheet.cell(`C${row}`).value(item.amount);
+        });
+
+        // 保存工作簿为 XLSX 文件
+        await workbook.toFileAsync('E:\\E_Consumer_Behavior_System\\E_Consumer_Behavior_System\\project\\A5-master\\任务123\\cph.xlsx');
+
+        res.status(200).json({ message: 'XLSX file saved successfully' });
+    } catch (err) {
+        console.error('Error saving XLSX file:', err);
+        res.status(500).json({ message: 'Failed to save XLSX file' });
+    }
+});
+
+// 从 MongoDB 读取数据并生成 XLSX 文件
+app.get('/read-xlsx', async (req, res) => {
+    try {
+        // 连接到 MongoDB
+        const client = await MongoClient.connect('mongodb://localhost:27017', {
+            useUnifiedTopology: true,
+        });
+
+        const db = client.db('XLSXData'); // 数据库名称为 XLSXData
+        const collection = db.collection('your_collection'); // 替换为您的集合名称
+
+        const data = [];
+
+        // 从集合中读取数据
+        const cursor = collection.find();
+
+        await cursor.forEach((document) => {
+            const { snumber, sdata, amount } = document;
+            data.push({ snumber, sdata, amount });
+        });
+
+        client.close();
+
+        res.status(200).json(data);
+    } catch (err) {
+        console.error('Error reading data from MongoDB:', err);
+        res.status(500).json({ message: 'Failed to read data from MongoDB' });
+    }
+});
+
+
 
 // 处理根路径
 app.get('/', (req, res) => {

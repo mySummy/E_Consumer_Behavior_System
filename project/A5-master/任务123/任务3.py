@@ -5,6 +5,7 @@ import warnings
 from statsmodels.stats.diagnostic import acorr_ljungbox
 from statsmodels.stats.stattools import durbin_watson
 from statsmodels.tsa.stattools import adfuller
+import json
 
 warnings.filterwarnings("ignore")  # 忽略警告
 
@@ -105,9 +106,10 @@ for i in unstable:
 ####################################### 预测值的处理 #######################################
 # 按照预测平均用电量降序排序
 power = sorted(power_dict.items(), key=lambda x: x[1], reverse=True)
-with open("居民客户的用电缴费习惯分析3.csv", mode='w', encoding='gbk', newline='') as f:
-    csvwriter = csv.writer(f)
-    csvwriter.writerow(["用户编号top5", "预测用电量"])
-    for i in range(5):
-        csvwriter.writerow([power[i][0], power[i][1]])
-print("over!!!")
+
+# 将结果转换为JSON字符串并输出
+output = {
+    "top5_users": [{"user_id": power[i][0], "predicted_usage": power[i][1]} for i in range(5)]
+}
+
+print(json.dumps(output))
