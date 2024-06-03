@@ -1,0 +1,19 @@
+{
+  "app": {
+    "bundleName": "com.example.myapplication",
+    "version": {
+      "code": 1,
+      "name": "1.0"
+    }
+  },
+  "deviceConfig": {
+    "default": {
+      "features": [],
+      "reqPermissions": [
+        {
+          "name": "ohos.permission.INTERNET"
+        }
+      ]
+    }
+  }
+}
