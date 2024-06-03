@@ -2,7 +2,7 @@ import router from '@ohos.router';
 @Entry
 @Component
 struct Page_18 {
-  @State message: string = '任务4/5 上传'
+  @State message: string = '任务4 上传'
 
   build() {
     Column() {
