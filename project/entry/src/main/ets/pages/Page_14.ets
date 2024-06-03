@@ -3,7 +3,8 @@ import router from '@ohos.router';
 @Component
 struct Page_14 {
   @State message: string = '分析-主界面'
-
+  @State money:number = 0
+  @State time:number = 0
   build() {
       Column() {
         Row(){
