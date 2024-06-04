@@ -3,7 +3,10 @@ import router from '@ohos.router';
 @Component
 struct Page_14 {
   @State message: string = '分析-主界面'
-
+  @State money:number = 0
+  @State time:number = 0
+  params: any = router.getParams()
+  int_id:Number = parseInt(this.params.id)
   build() {
       Column() {
         Row(){
@@ -33,7 +36,7 @@ struct Page_14 {
             Text('114RMB')
               .fontSize(20)
               .fontWeight(FontWeight.Bold)
-              .fontColor(Color.Yellow)}
+              .fontColor(Color.Gray)}
               .margin({top:50})
           Button('所有用户类型')
             .type(ButtonType.Normal)
@@ -45,7 +48,7 @@ struct Page_14 {
             .onClick(()=>{
               router.pushUrl({
                 url:'pages/Page_15',
-                params:{id:1}
+                params: { id: this.int_id }
               },router.RouterMode.Single,
                 err => {
                   if(err){
@@ -64,19 +67,19 @@ struct Page_14 {
             Text('514')
               .fontSize(20)
               .fontWeight(FontWeight.Bold)
-              .fontColor(Color.Yellow)}
+              .fontColor(Color.Gray)}
               .margin({top:50})
           Button('预测高价值TOP5')
             .type(ButtonType.Normal)
             .width(125)
             .height(100)
             .borderRadius(10)
-            .backgroundColor(Color.Red)
+            .backgroundColor(Color.Green)
             .margin({top:50})
             .onClick(()=>{
               router.pushUrl({
                 url:'pages/Page_16',
-                params:{id:1}
+                params: { id: this.int_id }
               },router.RouterMode.Single,
                 err => {
                   if(err){

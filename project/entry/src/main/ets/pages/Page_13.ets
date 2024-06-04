@@ -5,10 +5,13 @@ struct Page_13 {
   @State value: number = 0
   @State total: number = 100
   @State message: string = '分析-加载'
+  params: any = router.getParams()
+  int_id:Number = parseInt(this.params.id)
   onLoadComplete() {
     // 跳转到另一个页面
     router.pushUrl({
-      url: 'pages/Page_14'
+      url: 'pages/Page_14',
+      params: { id: this.int_id }
     }, router.RouterMode.Single,
       err => {
         if (err) {

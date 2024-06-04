@@ -1,54 +1,4 @@
-import featureAbility from '@ohos.ability.featureAbility';
 import router from '@ohos.router';
-import picker from '@ohos.file.picker';
-
-async function requestPermissions(): Promise<boolean> {
-  try {
-    let context = featureAbility.getContext();
-    const result = await context.requestPermissionsFromUser(
-      ['ohos.permission.WRITE_USER_STORAGE', 'ohos.permission.READ_USER_STORAGE'],
-      1
-    );
-    console.info('requestPermissionsFromUser data: ' + JSON.stringify(result));
-    // 检查是否所有权限都被授予
-    return result.authResults.every(authResult => authResult === 0);
-  } catch (err) {
-    console.error('Failed to request permissions:', err);
-    return false;
-  }
-}
-
-// 调用请求权限的函数
-
-async function picker_file(): Promise<string | null> {
-  try {
-    let documentSelectOptions = new picker.DocumentSelectOptions();
-    let documentPicker = new picker.DocumentViewPicker();
-    const documentSelectResult = await documentPicker.select(documentSelectOptions);
-
-    if (!documentSelectResult || documentSelectResult.length === 0) {
-      console.log('No file selected.');
-      return null;
-    }
-
-    let filePath = documentSelectResult[0];
-    if (!isExcelFile(filePath)) {
-      console.log('Selected file is not an Excel file.');
-      return null;
-    }
-
-    return filePath;
-  } catch (err) {
-    console.error('Error picking file:', err);
-    return null;
-  }
-}
-// 检查文件类型是否是 Excel
-function isExcelFile(filePath: string): boolean {
-  return filePath.endsWith('.xlsx') || filePath.endsWith('.xls');
-}
-
-
 @Entry
 @Component
 struct Page {
@@ -71,39 +21,64 @@ struct Page {
         }.justifyContent(FlexAlign.Start)
         .width('100%')
         Column(){
-          Button('上传文件')
-            .fontColor(Color.Black)
-            .type(ButtonType.Normal)
-            .width('150')
-            .height('40')
-            .borderRadius(5)
-            .backgroundColor(Color.White)
-            .borderWidth(1)
-            .borderColor(Color.Black)
-            .onClick(async () => {
-              try {
-                const permissionsGranted = await requestPermissions();
-                if (permissionsGranted) {
-                  const filePath = await picker_file();
-                  if (filePath) {
-                    router.pushUrl({
-                      url: 'pages/Page_13',
-                      params: { id: 1 },
-                    }, router.RouterMode.Single, (err) => {
-                      if (err) {
-                        console.error('路由失败:', err);
-                      }
-                    });
-                  } else {
-                    console.log('选择的文件不是 Excel 文件');
-                  }
-                } else {
-                  console.log('权限请求失败');
-                }
-              } catch (err) {
-                console.error('选择文件出错：', err);
-              }
-            });
+          Row(){
+            Button('文件1')
+              .fontColor(Color.Black)
+              .type(ButtonType.Normal)
+              .width('60')
+              .height('40')
+              .borderRadius(5)
+              .backgroundColor(Color.White)
+              .borderWidth(1)
+              .borderColor(Color.Black)
+              .onClick(()=>{
+                router.pushUrl({
+                  url: 'pages/Page_13',
+                  params: { id: 1 }})
+              })
+            Button('文件2')
+              .fontColor(Color.Black)
+              .type(ButtonType.Normal)
+              .width('60')
+              .height('40')
+              .borderRadius(5)
+              .backgroundColor(Color.White)
+              .borderWidth(1)
+              .borderColor(Color.Black)
+              .onClick(()=>{
+                router.pushUrl({
+                  url: 'pages/Page_13',
+                  params: { id: 2 }})
+              })
+            Button('文件3')
+              .fontColor(Color.Black)
+              .type(ButtonType.Normal)
+              .width('60')
+              .height('40')
+              .borderRadius(5)
+              .backgroundColor(Color.White)
+              .borderWidth(1)
+              .borderColor(Color.Black)
+              .onClick(()=>{
+                router.pushUrl({
+                  url: 'pages/Page_13',
+                  params: { id: 3 }})
+              })
+            Button('文件4')
+              .fontColor(Color.Black)
+              .type(ButtonType.Normal)
+              .width('60')
+              .height('40')
+              .borderRadius(5)
+              .backgroundColor(Color.White)
+              .borderWidth(1)
+              .borderColor(Color.Black)
+              .onClick(()=>{
+                router.pushUrl({
+                  url: 'pages/Page_13',
+                  params: { id: 4 }})
+              })
+          }
           Text('请上传xls/xlsx文件，大小在60M以内')
             .fontColor(Color.Gray)
             .fontSize(15)

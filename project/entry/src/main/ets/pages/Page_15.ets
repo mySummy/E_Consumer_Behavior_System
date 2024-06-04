@@ -16,6 +16,8 @@ class customer {
 @Component
 struct Page_15 {
   @State message: string = '分析-用户分类'
+  params: any = router.getParams()
+  int_id:Number = parseInt(this.params.id)
   private customers:Array<customer> = [
     new customer('田所浩二',1145,14,'恶臭客户'),
     new customer('田所浩二',1145,14,'恶臭客户'),

@@ -13,6 +13,8 @@ class customer {
 @Component
 struct Page_16 {
   @State message: string = 'TOP 5'
+  params: any = router.getParams()
+  int_id:Number = parseInt(this.params.id)
   private customers:Array<customer> = [
     new customer('田所浩二',99,1),
     new customer('田所浩二',98,2),
