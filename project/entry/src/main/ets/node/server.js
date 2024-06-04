@@ -5,6 +5,11 @@ const xlsx = require('xlsx-populate');
 const { MongoClient } = require('mongodb');
 const app = express();
 const port = 3000;
+
+const csvFilePath = 'E:/E_Consumer_Behavior_System/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析1.csv';
+const csv = require('csv-parser');
+const fs = require('fs');
+
 // mongo运行：
 //"C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath="C:\data\db"
 // 中间件
@@ -94,8 +99,22 @@ app.post('/login', async (req, res) => {
 // 获取平均缴费次数与平均缴费金额
 app.get('/payment-habits', async (req, res) => {
     try {
-        const paymentHabits = await PaymentHabit.find();
-        res.status(200).json(paymentHabits);
+        let paymentCount = 0;
+        let paymentAmount = 0;
+
+        fs.createReadStream(csvFilePath)
+            .pipe(csv())
+            .on('data', (row) => {
+                // 假设CSV文件中的列名为"缴费次数"和"缴费金额"
+                paymentCount = parseInt(row['平均缴费次数']);
+                paymentAmount = parseFloat(row['平均缴费金额']);
+            })
+            .on('end', () => {
+                res.status(200).json({
+                    paymentCount: paymentCount,
+                    paymentAmount: paymentAmount
+                });
+            });
     } catch (err) {
         res.status(500).json({ message: 'Internal server error' });
     }
