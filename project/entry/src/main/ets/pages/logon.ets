@@ -154,11 +154,12 @@ struct Logon {
                 }
               }).catch((err) => {
                 // 网络错误或其他错误
+                console.error('登录请求错误:', err); // 输出完整的错误对象
                 Prompt.showDialog({
                   message: '网络错误: ' + err,
                 });
               });
-            }66
+            }
           })
       }
       .width('100%')

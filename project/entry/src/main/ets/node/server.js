@@ -13,6 +13,17 @@ const fs = require('fs');
 // mongo运行：
 //"C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath="C:\data\db"
 // 中间件
+
+//const app = express();
+// 连接到MongoDB
+//mongoose.connect('mongodb://10.0.2.15:27017/mydatabase', {
+//}).then(() => {
+  //  console.log('Connected to MongoDB');
+//}).catch(err => {
+  //  console.error('Failed to connect to MongoDB', err);
+//});
+
+
 app.use(bodyParser.json());
 
 // 连接到MongoDB
@@ -189,29 +200,25 @@ app.post('/save-xlsx', async (req, res) => {
             })
             .on('end', async () => {
                 try {
-                    const workbook = await xlsx.fromBlankAsync();
-                    const sheet = workbook.sheet(0);
+                    const result = []; // 存储转换后的结构体变量数据
 
-                    // 在第一行中设置表头
-                    sheet.cell('A1').value('User Number');
-                    sheet.cell('B1').value('Payment Date');
-                    sheet.cell('C1').value('Payment Amount');
-
-                    // 遍历数据并将其写入单元格
-                    data.forEach((item, index) => {
-                        const row = index + 2; // 数据从第二行开始写入
-                        sheet.cell(`A${row}`).value(item.snumber);
-                        sheet.cell(`B${row}`).value(item.sdata);
-                        sheet.cell(`C${row}`).value(item.amount);
+                    // 遍历数据并转换为结构体变量格式
+                    data.forEach((item) => {
+                        const record = {
+                            userNumber: item.snumber,
+                            paymentDate: item.sdata,
+                            paymentAmount: item.amount
+                        };
+                        result.push(record);
                     });
 
-                    // 保存工作簿为 XLSX 文件
-                    await workbook.toFileAsync('path/to/output/file.xlsx');
+                    // 存储数据到数据库
+                    await XLSXData.create(result);
 
-                    res.status(200).json({ message: 'XLSX file saved successfully' });
+                    res.status(200).json({ message: 'Data saved to database successfully' });
                 } catch (err) {
-                    console.error('Error saving XLSX file:', err);
-                    res.status(500).json({ message: 'Failed to save XLSX file' });
+                    console.error('Error saving data to database:', err);
+                    res.status(500).json({ message: 'Failed to save data to database' });
                 }
             });
     } catch (err) {
