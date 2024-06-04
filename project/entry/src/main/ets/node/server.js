@@ -23,7 +23,7 @@ mongoose.connect('mongodb://localhost:27017/mydatabase', {
     console.error('Failed to connect to MongoDB', err);
 });
 
-// 创建 XLSXData 模型
+// 创建  模型
 const XLSXDataSchema = new mongoose.Schema({
     // 定义字段和类型
     snumber: String,//用户编号
@@ -177,32 +177,46 @@ app.get('/analyze', async (req, res) => {
 
 // 存储 XLSX 文件
 app.post('/save-xlsx', async (req, res) => {
-    const { data } = req.body; // 假设请求的数据位于 req.body.data 中
+    const filePath = 'E:/E_Consumer_Behavior_System/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析1.csv'; // CSV文件路径
+
+    const data = []; // 用于存储解析后的数据
 
     try {
-        const workbook = await xlsx.fromBlankAsync();
-        const sheet = workbook.sheet(0);
+        fs.createReadStream(filePath)
+            .pipe(csv())
+            .on('data', (row) => {
+                data.push(row);
+            })
+            .on('end', async () => {
+                try {
+                    const workbook = await xlsx.fromBlankAsync();
+                    const sheet = workbook.sheet(0);
 
-        // 在第一行中设置表头
-        sheet.cell('A1').value('User Number');
-        sheet.cell('B1').value('Payment Date');
-        sheet.cell('C1').value('Payment Amount');
+                    // 在第一行中设置表头
+                    sheet.cell('A1').value('User Number');
+                    sheet.cell('B1').value('Payment Date');
+                    sheet.cell('C1').value('Payment Amount');
 
-        // 遍历数据并将其写入单元格
-        data.forEach((item, index) => {
-            const row = index + 2; // 数据从第二行开始写入
-            sheet.cell(`A${row}`).value(item.snumber);
-            sheet.cell(`B${row}`).value(item.sdata);
-            sheet.cell(`C${row}`).value(item.amount);
-        });
+                    // 遍历数据并将其写入单元格
+                    data.forEach((item, index) => {
+                        const row = index + 2; // 数据从第二行开始写入
+                        sheet.cell(`A${row}`).value(item.snumber);
+                        sheet.cell(`B${row}`).value(item.sdata);
+                        sheet.cell(`C${row}`).value(item.amount);
+                    });
 
-        // 保存工作簿为 XLSX 文件
-        await workbook.toFileAsync('E:\\E_Consumer_Behavior_System\\E_Consumer_Behavior_System\\project\\A5-master\\任务123\\cph.xlsx');
+                    // 保存工作簿为 XLSX 文件
+                    await workbook.toFileAsync('path/to/output/file.xlsx');
 
-        res.status(200).json({ message: 'XLSX file saved successfully' });
+                    res.status(200).json({ message: 'XLSX file saved successfully' });
+                } catch (err) {
+                    console.error('Error saving XLSX file:', err);
+                    res.status(500).json({ message: 'Failed to save XLSX file' });
+                }
+            });
     } catch (err) {
-        console.error('Error saving XLSX file:', err);
-        res.status(500).json({ message: 'Failed to save XLSX file' });
+        console.error('Error parsing CSV file:', err);
+        res.status(500).json({ message: 'Failed to parse CSV file' });
     }
 });
 
