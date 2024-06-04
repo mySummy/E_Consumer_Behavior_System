@@ -5,6 +5,8 @@ struct Page_14 {
   @State message: string = '分析-主界面'
   @State money:number = 0
   @State time:number = 0
+  params: any = router.getParams()
+  int_id:Number = parseInt(this.params.id)
   build() {
       Column() {
         Row(){
@@ -46,7 +48,7 @@ struct Page_14 {
             .onClick(()=>{
               router.pushUrl({
                 url:'pages/Page_15',
-                params:{id:1}
+                params: { id: this.int_id }
               },router.RouterMode.Single,
                 err => {
                   if(err){
@@ -77,7 +79,7 @@ struct Page_14 {
             .onClick(()=>{
               router.pushUrl({
                 url:'pages/Page_16',
-                params:{id:1}
+                params: { id: this.int_id }
               },router.RouterMode.Single,
                 err => {
                   if(err){

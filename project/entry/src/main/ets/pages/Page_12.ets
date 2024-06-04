@@ -48,7 +48,7 @@ struct Page {
               .onClick(()=>{
                 router.pushUrl({
                   url: 'pages/Page_13',
-                  params: { id: 1 }})
+                  params: { id: 2 }})
               })
             Button('文件3')
               .fontColor(Color.Black)
@@ -62,7 +62,7 @@ struct Page {
               .onClick(()=>{
                 router.pushUrl({
                   url: 'pages/Page_13',
-                  params: { id: 1 }})
+                  params: { id: 3 }})
               })
             Button('文件4')
               .fontColor(Color.Black)
@@ -76,7 +76,7 @@ struct Page {
               .onClick(()=>{
                 router.pushUrl({
                   url: 'pages/Page_13',
-                  params: { id: 1 }})
+                  params: { id: 4 }})
               })
           }
           Text('请上传xls/xlsx文件，大小在60M以内')
