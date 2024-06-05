@@ -63,11 +63,25 @@ struct Page_15 {
           .fontSize(30)
           .fontWeight(FontWeight.Bold)
           .margin({ top: 50, right: 90 })
+        DataPanel({ values: [30,30,30,10], max: 100, type: DataPanelType.Line }).width(360).height(30)
+        Row(){
+          Text('高价值').fontSize(20)
+          .fontWeight(FontWeight.Bold)
+          .fontColor('#F5B621')
+          Text('大众型').fontSize(20)
+            .fontWeight(FontWeight.Bold)
+            .fontColor('#F1521E')
+          Text('潜力型').fontSize(20)
+            .fontWeight(FontWeight.Bold)
+            .fontColor('#EE64A1')
+          Text('低价值').fontSize(20)
+            .fontWeight(FontWeight.Bold)
+            .fontColor('#A64CEF')}.justifyContent(FlexAlign.SpaceBetween).width('100%')
         Text('用户  平均缴费金额 平均缴费次数  类型')
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.Green)
-          .margin({top:100})
+          .margin({top:50})
         List(){
           ForEach(
             this.customers,
@@ -77,7 +91,7 @@ struct Page_15 {
                   Text(customers.name)
                     .fontSize(20)
                     .fontWeight(FontWeight.Bold)
-                  Text(customers.money.toString() + 'RMB')
+                  Text('￥'+customers.money.toString())
                     .fontSize(20)
                     .fontWeight(FontWeight.Bold)
                   Text(customers.frequency.toString() + '次')
@@ -99,6 +113,7 @@ struct Page_15 {
           .backgroundColor(Color.Green)
           .borderRadius(10)
           .backgroundColor(Color.Green)
+          .margin({top:20})
       }
       .width('100%')
       .height('100%')
