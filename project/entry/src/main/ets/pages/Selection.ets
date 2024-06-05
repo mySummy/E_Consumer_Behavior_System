@@ -1,10 +1,12 @@
 import router from '@ohos.router';
 
 class Item {
+  id: number;
   name: string;
   image: ResourceStr;
 
-  constructor(name: string, image: ResourceStr) {
+  constructor(id: number, name: string, image: ResourceStr) {
+    this.id = id;
     this.name = name;
     this.image = image;
   }
@@ -15,31 +17,43 @@ class Item {
 struct Page_18 {
   @State message: string = '文档';
   @State private items: Array<Item> = [];
-  @State mode: number = router.getParams()['mode']
+  @State mode: number = router.getParams()['mode'];
+
   item_input() {
     const newItems: Array<Item> = [];
     if (this.mode === 1) {
       for (let i = 1; i <= 8; i++) {
-        newItems.push(new Item(`居民用电分类${i}.xlsx`, $r('app.media.xlsx')));
+        newItems.push(new Item(i, `居民用电分类${i}.xlsx`, $r('app.media.xlsx')));
       }
-      this.items = newItems;
-    }
-    else if(this.mode === 2){
+    } else if (this.mode === 2) {
       for (let i = 1; i <= 4; i++) {
-        newItems.push(new Item(`企业用电分析${i}.csv`, $r('app.media.xlsx')));
+        newItems.push(new Item(i, `企业用电分析${i}.csv`, $r('app.media.xlsx')));
       }
-      for (let i = 1; i <= 4; i++) {
-        newItems.push(new Item(`企业用电分析${i}.xlsx`, $r('app.media.xlsx')));
+      for (let i = 5; i <= 8; i++) {
+        newItems.push(new Item(i, `企业用电分析${i-4}.xlsx`, $r('app.media.xlsx')));
       }
-      this.items = newItems;
-    }
-    else{
+    } else {
       for (let i = 1; i <= 8; i++) {
-        newItems.push(new Item(`集群分析${i}.csv`, $r('app.media.xlsx')));
+        newItems.push(new Item(i, `集群分析${i}.csv`, $r('app.media.xlsx')));
       }
-      this.items = newItems;
     }
+    this.items = newItems;
+  }
 
+  onLoadComplete(selectedId: number) {
+    // 跳转到另一个页面，并带上所选择文章的id
+    router.pushUrl({
+      url: 'pages/loading',
+      params: {
+        mode: this.mode,
+        selectedId: selectedId
+      }
+    }, router.RouterMode.Single,
+      err => {
+        if (err) {
+          console.log('路由失败');
+        }
+      });
   }
 
   build() {
@@ -69,7 +83,7 @@ struct Page_18 {
             Row({ space: 10 }) {
               Image(item.image).width(100);
               Column() {
-                Text(item.name)
+                Text(`${item.id}: ${item.name}`)
                   .fontSize(18)
                   .fontColor('#444')
                   .fontWeight(FontWeight.Bold);
@@ -79,7 +93,7 @@ struct Page_18 {
                   .backgroundColor(Color.Gray)
                   .margin({ top: 20 })
                   .onClick(() => {
-                    router.back();
+                    this.onLoadComplete(item.id);
                   });
               }
               .alignItems(HorizontalAlign.Start);
@@ -94,10 +108,10 @@ struct Page_18 {
       }
       .height('80%')
       .margin({ top: 10 })
-      .padding({ bottom: 10 })
+      .padding({ bottom: 10 });
     }
     .onAppear(() => {
       this.item_input();
-    })
+    });
   }
 }

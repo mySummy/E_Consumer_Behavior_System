@@ -1,3 +1,4 @@
+import router from '@ohos.router'
 @Entry
 @Component
 struct UserTabs {
@@ -7,6 +8,19 @@ struct UserTabs {
   build() {
     Row() {
       Column() {
+        Row(){
+          Text('< 返回')
+            .fontSize(20)
+            .fontWeight(FontWeight.Bold)
+            .onClick(()=>{
+              router.back({url:"pages/Index"})
+            })
+            .margin({
+              top:'40vp',
+              left:'10vp'
+            })
+        }
+        .width('100%')
         Tabs({barPosition:BarPosition.End,controller:this.controller}){
           TabContent(){
             Column()
