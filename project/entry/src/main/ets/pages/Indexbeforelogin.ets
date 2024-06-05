@@ -32,7 +32,7 @@ struct Page_1 {
         Button('用电归类')
           .onClick(()=>{
             router.pushUrl({
-              url:'pages/Page_2',
+              url:'pages/needlogin',
               params:{id:1}
             },router.RouterMode.Single,
               err => {
@@ -53,7 +53,7 @@ struct Page_1 {
         Button('历史记录')
           .onClick(()=>{
             router.pushUrl({
-              url:'pages/Page_2',
+              url:'pages/needlogin',
               params:{id:1}
             },router.RouterMode.Single,
               err => {
@@ -80,7 +80,7 @@ struct Page_1 {
         Button('用电调度')
           .onClick(()=>{
             router.pushUrl({
-              url:'pages/Page_2',
+              url:'pages/needlogin',
               params:{id:1}
             },router.RouterMode.Single,
               err => {
@@ -101,7 +101,7 @@ struct Page_1 {
         Button('集群分析')
           .onClick(()=>{
             router.pushUrl({
-              url:'pages/Page_2',
+              url:'pages/needlogin',
               params:{id:1}
             },router.RouterMode.Single,
               err => {

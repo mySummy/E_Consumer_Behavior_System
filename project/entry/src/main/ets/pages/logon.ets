@@ -16,7 +16,7 @@ struct Logon {
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.Gray)
           .onClick(()=>{
-            router.back({url:'pages/Page_1'})
+            router.back({url:'pages/Indexbeforelogin'})
           })
           .margin({
             top:'30vp',

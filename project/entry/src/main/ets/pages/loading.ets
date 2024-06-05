@@ -10,7 +10,7 @@ struct Page_13 {
   onLoadComplete() {
     // 跳转到另一个页面
     router.pushUrl({
-      url: 'pages/Page_14',
+      url: 'pages/analysis',
       params: { id: this.int_id }
     }, router.RouterMode.Single,
       err => {
