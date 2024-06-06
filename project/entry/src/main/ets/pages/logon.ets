@@ -118,7 +118,7 @@ struct Logon {
             } else {
               const httpRequest = http.createHttp();
               httpRequest.request(
-                'http://66:3000/login', // URL should be a string
+                'http://localhost:3000/login', // URL should be a string
                 {
                   method: http.RequestMethod.POST, // 使用正确的枚举类型
                   header: { 'Content-Type': 'application/json' },
@@ -136,7 +136,7 @@ struct Logon {
                   console.log('登录成功');
                   router.clear();
                   router.pushUrl({
-                    url: 'pages/Page_11', // 主页页面
+                    url: 'pages/Index', // 主页页面
                     params:{username:this.username}
                   },
                     router.RouterMode.Single,
