@@ -10,18 +10,6 @@ struct Page_14 {
   params: any = router.getParams()
   int_id:Number = parseInt(this.params.id)
 
-  onInit() {
-    this.sendHttpRequest(
-      (response, statusCode) => {
-        this.money = response.avgAmount;
-        this.time = response.avgCount;
-        Prompt.showToast({ message: `Data fetched: avgAmount = ${this.money}, avgCount = ${this.time}` });
-      },
-      (error) => {
-        Prompt.showToast({ message: `Error: ${error.message || error}` });
-      }
-    );
-  }
   sendHttpRequest(onSuccess: (response: any, statusCode: number) => void, onError: (error: any) => void) {
     const httpRequest = http.createHttp();
     httpRequest.request(
@@ -139,5 +127,17 @@ struct Page_14 {
       }
       .width('100%')
       .height('100%')
+      .onAppear(() => {
+        this.sendHttpRequest(
+          (response, statusCode) => {
+            this.money = response.avgAmount;
+            this.time = response.avgCount;
+            Prompt.showToast({ message: `Data fetched: avgAmount = ${this.money}, avgCount = ${this.time}` });
+          },
+          (error) => {
+            Prompt.showToast({ message: `Error: ${error.message || error}` });
+          }
+        );
+      });
   }
 }
