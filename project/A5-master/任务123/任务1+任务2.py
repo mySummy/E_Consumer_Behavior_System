@@ -2,7 +2,7 @@ import pandas as pd
 import csv
 
 ################################## 数据读取与预处理 ################################
-df = pd.read_excel('E:/E_Consumer_Behavior_System/E_Consumer_Behavior_System/project/A5-master/任务123/cph.xlsx')
+df = pd.read_excel('E:/works/Harmony/E_Consumer_Behavior_System/project/A5-master/任务123/cph.xlsx')
 df.columns = ['用户编号', '缴费日期', '缴费金额']
 print(df.isnull().any())  # 检查是否有缺失值
 

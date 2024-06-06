@@ -4,6 +4,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const csv = require('csv-parser');
 const fs = require('fs');
 const { exec } = require('child_process');
+const iconv = require('iconv-lite');
 
 const app = express();
 const port = 3000;
@@ -70,36 +71,53 @@ const readCSVAndCalculateStats = (filePath) => {
     let totalCount = 0;
     let recordCount = 0;
 
-    fs.createReadStream(filePath)
+    // 使用 iconv-lite 指定编码格式为GBK
+    const fileStream = fs.createReadStream(filePath).pipe(iconv.decodeStream('GBK'));
+
+    fileStream
         .pipe(csv())
         .on('data', (row) => {
-            totalAmount += parseFloat(row.amount);
-            totalCount += parseInt(row.count);
+            // 使用正确的列名来解析数据
+            totalAmount += parseFloat(row['平均缴费金额']);
+            totalCount += parseFloat(row['平均缴费次数']); // 使用 parseFloat 来处理小数
             recordCount++;
         })
         .on('end', () => {
-            paymentStats.avgAmount = totalAmount / recordCount;
-            paymentStats.avgCount = totalCount / recordCount;
+            if (recordCount > 0) {
+                paymentStats.avgAmount = totalAmount / recordCount;
+                paymentStats.avgCount = totalCount / recordCount;
+            } else {
+                paymentStats.avgAmount = 0;
+                paymentStats.avgCount = 0;
+            }
+            console.log('avgAmount： '+ paymentStats.avgAmount);
+            console.log('avgCount： '+ paymentStats.avgCount);
             console.log('CSV file successfully processed');
         });
 };
 
 // 读取CSV文件内容并存储
-const readCSVFile = (filePath, storageArray) => {
-    fs.createReadStream(filePath)
+const readCSVFile = (filePath, storageArray, encoding) => {
+    // 创建可读流，并指定编码格式
+    const fileStream = fs.createReadStream(filePath).pipe(iconv.decodeStream(encoding));
+
+    fileStream
         .pipe(csv())
         .on('data', (row) => {
             storageArray.push(row);
         })
         .on('end', () => {
             console.log(`CSV file ${filePath} successfully processed`);
+        })
+        .on('error', (err) => {
+            console.error(`Error processing CSV file ${filePath}:`, err);
         });
 };
 
 // 初始化数据读取
 readCSVAndCalculateStats(csvFilePath);
-readCSVFile('E:/works/Harmony/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析2.csv', csv2Data);
-readCSVFile('E:/works/Harmony/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析3.csv', csv3Data);
+readCSVFile('E:/works/Harmony/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析2.csv', csv2Data,'GBK');
+readCSVFile('E:/works/Harmony/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析3.csv', csv3Data,'UTF-8');
 // API端点以返回计算的平均值
 app.get('/payment-stats', (req, res) => {
     res.json(paymentStats);
