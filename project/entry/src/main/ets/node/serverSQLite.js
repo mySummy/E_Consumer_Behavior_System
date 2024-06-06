@@ -105,6 +105,7 @@ const readCSVFile = (filePath, storageArray, encoding) => {
         .pipe(csv())
         .on('data', (row) => {
             storageArray.push(row);
+            console.log('Row data:', row);
         })
         .on('end', () => {
             console.log(`CSV file ${filePath} successfully processed`);
