@@ -14,7 +14,7 @@ struct Page_14 {
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
             .onClick(()=>{
-              router.back({url:"pages/Page_11"})
+              router.back({url:"pages/Index"})
             })
             .margin({
               top:'40vp',
@@ -47,7 +47,7 @@ struct Page_14 {
             .margin({top:50})
             .onClick(()=>{
               router.pushUrl({
-                url:'pages/Page_15',
+                url:'pages/classification',
                 params: { id: this.int_id }
               },router.RouterMode.Single,
                 err => {
@@ -78,7 +78,7 @@ struct Page_14 {
             .margin({top:50})
             .onClick(()=>{
               router.pushUrl({
-                url:'pages/Page_16',
+                url:'pages/Top5',
                 params: { id: this.int_id }
               },router.RouterMode.Single,
                 err => {
@@ -98,7 +98,7 @@ struct Page_14 {
           .backgroundColor(Color.Blue)
           .margin({top:80})
           .onClick(()=>{
-            router.back({url:"pages/Page_12"})
+            router.back({url:"pages/upload"})
           })
       }
       .width('100%')

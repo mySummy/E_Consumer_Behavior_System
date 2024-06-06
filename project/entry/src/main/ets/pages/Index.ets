@@ -21,8 +21,8 @@ struct Index {
           Button('用电归类')
             .onClick(()=>{
               router.pushUrl({
-                url:'pages/Page_12',
-                params:{id:1}
+                url:'pages/upload',
+                params:{mode:1}
               },router.RouterMode.Single,
                 err => {
                   if(err){
@@ -42,8 +42,7 @@ struct Index {
           Button('历史记录')
             .onClick(()=>{
               router.pushUrl({
-                url:'pages/Page_17',
-                params:{id:1}
+                url:'pages/history'
               },router.RouterMode.Single,
                 err => {
                   if(err){
@@ -69,8 +68,8 @@ struct Index {
           Button('用电调度')
             .onClick(()=>{
               router.pushUrl({
-                url:'pages/Page_18',
-                params:{id:1}
+                url:'pages/upload',
+                params:{mode:2}
               },router.RouterMode.Single,
                 err => {
                   if(err){
@@ -90,8 +89,8 @@ struct Index {
           Button('集群分析')
             .onClick(()=>{
               router.pushUrl({
-                url:'pages/Page_19',
-                params:{id:1}
+                url:'pages/upload',
+                params:{mode:3}
               },router.RouterMode.Single,
                 err => {
                   if(err){

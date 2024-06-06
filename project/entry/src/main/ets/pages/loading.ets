@@ -5,20 +5,46 @@ struct Page_13 {
   @State value: number = 0
   @State total: number = 100
   @State message: string = '分析-加载'
-  params: any = router.getParams()
-  int_id:Number = parseInt(this.params.id)
+  @State mode: number = router.getParams()['mode'];
+  @State selectedId: number = router.getParams()['selectedId'];
   onLoadComplete() {
     // 跳转到另一个页面
-    router.pushUrl({
-      url: 'pages/Page_14',
-      params: { id: this.int_id }
-    }, router.RouterMode.Single,
-      err => {
-        if (err) {
-          console.log('路由失败');
+    if (this.mode===1) {
+      router.pushUrl({
+        url: 'pages/analysis',
+        params: { selectedId: this.selectedId }
+      }, router.RouterMode.Single,
+        err => {
+          if (err) {
+            console.log('路由失败');
+          }
         }
-      }
-    )
+      )
+    }
+    else if(this.mode===2){
+      router.pushUrl({
+        url: 'pages/dispatch',
+        params: { selectedId: this.selectedId }
+      }, router.RouterMode.Single,
+        err => {
+          if (err) {
+            console.log('路由失败');
+          }
+        }
+      )
+    }
+    else{
+      router.pushUrl({
+        url: 'pages/userTabs',
+        params: { selectedId: this.selectedId }
+      }, router.RouterMode.Single,
+        err => {
+          if (err) {
+            console.log('路由失败');
+          }
+        }
+      )
+    }
   }
   startLoading() {
     let countdown = 0;
