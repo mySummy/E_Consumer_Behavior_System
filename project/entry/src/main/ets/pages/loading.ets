@@ -55,7 +55,7 @@ struct Page_13 {
         this.onLoadComplete();
         clearInterval(intervalId);
       }
-    }, 50);
+    }, 10);
   }
   build() {
     Row() {

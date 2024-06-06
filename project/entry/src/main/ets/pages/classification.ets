@@ -1,48 +1,85 @@
 import router from '@ohos.router';
+import Prompt from '@system.prompt';
+import http from '@ohos.net.http';
 class customer {
-  name:string
+  userid:number
   money:number
   frequency:number
   type:string
 
-  constructor(name:string,money:number,frequency:number,type:string) {
-    this.name = name
+  constructor(userid:number,money:number,frequency:number,type:string) {
+    this.userid = userid
     this.money = money
     this.frequency = frequency
     this.type = type
   }
 }
+
 @Entry
 @Component
 struct Page_15 {
   @State message: string = '分析-用户分类'
-  params: any = router.getParams()
-  int_id:Number = parseInt(this.params.id)
-  private customers:Array<customer> = [
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-    new customer('田所浩二',1145,14,'恶臭客户'),
-  ]
+  // params: any = router.getParams()
+  // int_id:Number = parseInt(this.params.id)
+  @State private customers:Array<customer> = []
+  @State type1:number = 0
+  @State type2:number = 0
+  @State type3:number = 0
+  @State type4:number = 0
+
+  getCsvData() {
+    const httpRequest = http.createHttp();
+    httpRequest.request(
+      'http://localhost:3000/csv2-data',
+      {
+        method: http.RequestMethod.GET,
+        header: { 'Content-Type': 'application/json' },
+        readTimeout: 60000,
+        connectTimeout: 60000
+      }
+    ).then((data) => {
+      const response = JSON.parse(data.result as string);
+      if (data.responseCode === 200) {
+        console.log('获取CSV数据成功');
+        this.customers = response.map((item) =>
+        new customer(
+          parseInt(item['用户编号'])-1000000000,
+          parseFloat(item['缴费金额']) / parseInt(item['缴费次数']),
+          parseInt(item['缴费次数']),
+          item['客户类型']
+        )
+        );
+        this.customers.forEach(customer => {
+
+          if (customer.type === "高价值型客户") {
+            this.type1++;
+          }
+          else if (customer.type === "大众型客户") {
+            this.type2++;
+          }
+          else if (customer.type === "潜力型客户") {
+            this.type3++;
+          }
+          else{
+            this.type4++;
+          }
+          console.log(this.type4.toString());
+        });
+      } else {
+        const errorMessage = '获取CSV数据失败: ' + response.message;
+        console.error(errorMessage);
+        Prompt.showDialog({
+          message: errorMessage,
+        });
+      }
+    }).catch((err) => {
+      const errorMessage = '网络错误: ' + err.message;
+      console.error('获取CSV数据请求错误:', err);
+      Prompt.showDialog({
+        message: errorMessage,
+      });
+    });
+  }
   build() {
       Column() {
         Row() {
@@ -63,21 +100,23 @@ struct Page_15 {
           .fontSize(30)
           .fontWeight(FontWeight.Bold)
           .margin({ top: 50, right: 90 })
-        DataPanel({ values: [30,30,30,10], max: 100, type: DataPanelType.Line }).width(360).height(30)
+        DataPanel({ values: [this.type1,this.type2,this.type3,this.type4], max: this.type1+this.type2+this.type3+this.type4, type: DataPanelType.Line }).width(360).height(30)
         Row(){
-          Text('高价值').fontSize(20)
-          .fontWeight(FontWeight.Bold)
-          .fontColor('#F5B621')
-          Text('大众型').fontSize(20)
+          Text('高价值: '+this.type1).fontSize(16)
+            .fontWeight(FontWeight.Bold)
+            .fontColor('#F5B621')
+          Text('大众型: '+this.type2).fontSize(16)
             .fontWeight(FontWeight.Bold)
             .fontColor('#F1521E')
-          Text('潜力型').fontSize(20)
+          Text('潜力型: '+this.type3).fontSize(16)
             .fontWeight(FontWeight.Bold)
             .fontColor('#EE64A1')
-          Text('低价值').fontSize(20)
+          Text('低价值: '+this.type4).fontSize(16)
             .fontWeight(FontWeight.Bold)
-            .fontColor('#A64CEF')}.justifyContent(FlexAlign.SpaceBetween).width('100%')
-        Text('用户  平均缴费金额 平均缴费次数  类型')
+            .fontColor('#A64CEF')
+        }
+        .justifyContent(FlexAlign.SpaceBetween).width('100%')
+        Text('用户  平均缴费金额   缴费次数  类型')
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.Green)
@@ -85,21 +124,29 @@ struct Page_15 {
         List(){
           ForEach(
             this.customers,
-            (customers:customer) => {
+            (customer: customer) => {
               ListItem(){
                 Row(){
-                  Text(customers.name)
+                  Text(''+customer.userid)
                     .fontSize(20)
                     .fontWeight(FontWeight.Bold)
-                  Text('￥'+customers.money.toString())
+                    .textAlign(TextAlign.Center)
+                    .width('25%')
+                  Text('￥'+customer.money.toFixed(2).toString())
                     .fontSize(20)
                     .fontWeight(FontWeight.Bold)
-                  Text(customers.frequency.toString() + '次')
+                    .textAlign(TextAlign.Center)
+                    .width('25%')
+                  Text(customer.frequency.toString() + '次')
                     .fontSize(20)
                     .fontWeight(FontWeight.Bold)
-                  Text(customers.type)
+                    .textAlign(TextAlign.Center)
+                    .width('25%')
+                  Text(customer.type)
                     .fontSize(20)
                     .fontWeight(FontWeight.Bold)
+                    .textAlign(TextAlign.Center)
+                    .width('25%')
                 }.justifyContent(FlexAlign.SpaceBetween).width('100%')
               }
             }
@@ -117,5 +164,8 @@ struct Page_15 {
       }
       .width('100%')
       .height('100%')
+      .onAppear(() => {
+        this.getCsvData()
+      });
   }
 }
