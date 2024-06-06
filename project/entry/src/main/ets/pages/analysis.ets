@@ -70,7 +70,7 @@ struct Page_14 {
             Text('￥'+this.money)
               .fontSize(20)
               .fontWeight(FontWeight.Bold)
-              .fontColor(Color.Gray)}
+              .fontColor('#209EA6')}
               .margin({top:50})
           Button('所有用户类型')
             .type(ButtonType.Normal)
@@ -101,7 +101,7 @@ struct Page_14 {
             Text(this.time +'次')
               .fontSize(20)
               .fontWeight(FontWeight.Bold)
-              .fontColor(Color.Gray)}
+              .fontColor('#209EA6')}
               .margin({top:50})
           Button('预测高价值TOP5')
             .type(ButtonType.Normal)
