@@ -8,6 +8,14 @@ const iconv = require('iconv-lite');
 
 const app = express();
 const port = 3000;
+//图片读取：
+const imageFolderPath1 = 'E:/E_Consumer_Behavior_System/E_Consumer_Behavior_System/project/A5-master/任务4';
+const imageFolderPath2 = 'E:/E_Consumer_Behavior_System/E_Consumer_Behavior_System/project/A5-master/任务5';
+
+app.use(express.static(imageFolderPath1)); // 指定静态文件夹路径1
+app.use(express.static(imageFolderPath2)); // 指定静态文件夹路径2
+
+
 const csvFilePath = 'E:/E_Consumer_Behavior_System/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析1.csv';
 
 // 初始化SQLite数据库连接
@@ -185,6 +193,36 @@ app.post('/login', async (req, res) => {
     }
 });
 
+// 读取和展示两个文件夹中的图片
+app.get('/images', async (req, res) => {
+    try {
+        // 读取第一个文件夹中的所有图片文件
+        const files1 = await fs.readdir(imageFolderPath1);
+        const imageFiles1 = files1.filter(file => {
+            const extname = path.extname(file).toLowerCase();
+            return ['.jpg', '.jpeg', '.png', '.gif'].includes(extname);
+        });
+        const imagePaths1 = imageFiles1.map(file => {
+            return `/images1/${file}`; // 注意这里的路径是相对于静态文件夹1的路径
+        });
+
+        // 读取第二个文件夹中的所有图片文件
+        const files2 = await fs.readdir(imageFolderPath2);
+        const imageFiles2 = files2.filter(file => {
+            const extname = path.extname(file).toLowerCase();
+            return ['.jpg', '.jpeg', '.png', '.gif'].includes(extname);
+        });
+        const imagePaths2 = imageFiles2.map(file => {
+            return `/images2/${file}`; // 注意这里的路径是相对于静态文件夹2的路径
+        });
+
+        // 将两个文件夹中的图片路径发送给客户端
+        res.json({ images1: imagePaths1, images2: imagePaths2 });
+    } catch (err) {
+        console.error('Error reading image folders:', err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 // 操作记录相关的API端点
 
