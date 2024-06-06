@@ -5,7 +5,6 @@ const xlsx = require('xlsx-populate');
 const { MongoClient } = require('mongodb');
 const app = express();
 const port = 3000;
-
 const csvFilePath = 'E:/E_Consumer_Behavior_System/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析1.csv';
 const csv = require('csv-parser');
 const fs = require('fs');
@@ -166,6 +165,7 @@ app.get('/analyze', (req, res) => {
 });
 
 const { exec } = require('child_process');
+
 // 处理分析请求
 app.get('/analyze', async (req, res) => {
     try {
