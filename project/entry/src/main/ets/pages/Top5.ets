@@ -1,4 +1,6 @@
 import router from '@ohos.router';
+import Prompt from '@system.prompt';
+import http from '@ohos.net.http';
 class customer {
   name:string
   probability:number
@@ -15,13 +17,50 @@ struct Page_16 {
   @State message: string = 'TOP 5'
   params: any = router.getParams()
   int_id:Number = parseInt(this.params.id)
-  private customers:Array<customer> = [
-    new customer('田所浩二',99,1),
-    new customer('田所浩二',98,2),
-    new customer('田所浩二',97,3),
-    new customer('田所浩二',96,4),
-    new customer('田所浩二',95,5),
-  ]
+  @State private customers:Array<customer> = []
+
+
+  getCsvData() {
+    const httpRequest = http.createHttp();
+    httpRequest.request(
+      'http://localhost:3000/csv3-data', // URL 应为字符串
+      {
+        method: http.RequestMethod.GET, // 使用正确的枚举类型
+        header: { 'Content-Type': 'application/json' }, // 设置正确的请求头
+        readTimeout: 60000, // 读取超时
+        connectTimeout: 60000 // 连接超时
+      }
+    ).then((data) => {
+      const response = JSON.parse(data.result as string); // 确保 result 是字符串类型
+      if (data.responseCode === 200) {
+        // 请求成功，处理返回的数据
+        console.log('获取CSV数据成功');
+        this.customers = response.map((item: any, index: number) =>
+        new customer(
+          item['用户编号top5'],
+          parseInt(item['预测用电量']),
+          index + 1
+        ))
+        console.log(JSON.stringify(this.customers, null, 2));
+      } else {
+        // 请求失败，显示错误信息
+        const errorMessage = '获取CSV数据失败: ' + response.message;
+        console.error(errorMessage);
+        Prompt.showDialog({
+          message: errorMessage,
+        });
+      }
+    }).catch((err) => {
+      // 网络错误或其他错误
+      const errorMessage = '网络错误: ' + err.message;
+      console.error('获取CSV数据请求错误:', err);
+      Prompt.showDialog({
+        message: errorMessage,
+      });
+    });
+  }
+
+
   build() {
       Column() {
         Row() {
@@ -44,50 +83,12 @@ struct Page_16 {
           Text('预测月份：20XX.XX')
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
-          Text('预测时间区块')
-            .fontSize(20)
-            .fontWeight(FontWeight.Bold)
-          Text('起始月份')
-            .fontSize(20)
-            .fontWeight(FontWeight.Bold)
-          Select([{ value: '1'},{ value: '2'},{ value: '3'},{ value: '4'},{ value: '5'},{ value: '6'},{ value: '7'},{ value: '8'},
-            { value: '9'},{ value: '10'},{ value: '11'},{ value: '12'}])
-            .selected(-1)
-            .value('选择月份')
-            .font({ size: 16, weight: 500 })
-            .fontColor('#182431')
-            .selectedOptionFont({ size: 16, weight: 400 })
-            .optionFont({ size: 16, weight: 400 })
-            .margin({top:10})
-            .onSelect((index: number) => {
-              console.info('Select:' + index)
-            })
-            .borderWidth(1)
-          Text('结束月份')
-            .fontSize(20)
-            .fontWeight(FontWeight.Bold)
-            .margin({top:20})
-          Select([{ value: '1'},{ value: '2'},{ value: '3'},{ value: '4'},{ value: '5'},{ value: '6'},{ value: '7'},{ value: '8'},
-            { value: '9'},{ value: '10'},{ value: '11'},{ value: '12'}])
-            .selected(-1)
-            .value('选择月份')
-            .font({ size: 16, weight: 500 })
-            .fontColor('#182431')
-            .selectedOptionFont({ size: 16, weight: 400 })
-            .optionFont({ size: 16, weight: 400 })
-            .margin({top:10})
-            .borderWidth(1)
-
-            .onSelect((index: number) => {
-              console.info('Select:' + index)
-            })
-        }.margin({top:10,right:50}).alignItems(HorizontalAlign.Start)
         Text('预测结果')
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
-          .margin({right:250,top:100})
+          .margin({right:250,top:100})}
         Column(){
-          Text('TOP          用户          高价值概率')
+          Text('TOP       用户         预测用电量   ')
             .fontSize(20)
             .fontColor(Color.Green)
             .fontWeight(FontWeight.Bold)
@@ -103,7 +104,7 @@ struct Page_16 {
                   .fontSize(20)
                   .fontWeight(FontWeight.Bold)
                   .margin({right:10})
-                Text(customers.probability.toString() + '%')
+                Text(customers.probability.toString())
                   .fontSize(20)
                   .fontWeight(FontWeight.Bold)
                   .margin({right:70})
@@ -114,5 +115,8 @@ struct Page_16 {
       }
       .width('100%')
     .height('100%')
+      .onAppear(() => {
+        this.getCsvData()
+      });
   }
 }
