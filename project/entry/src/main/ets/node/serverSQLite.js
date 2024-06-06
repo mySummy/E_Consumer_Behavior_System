@@ -98,8 +98,8 @@ const readCSVFile = (filePath, storageArray) => {
 
 // 初始化数据读取
 readCSVAndCalculateStats('E:/E_Consumer_Behavior_System/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析1.csv');
-readCSVFile('E:/E_Consumer_Behavior_System/E_Consumer_Behavior_System/project/A5-master/任务123/csv2.csv', csv2Data);
-readCSVFile('E:/E_Consumer_Behavior_System/E_Consumer_Behavior_System/project/A5-master/任务123/csv3.csv', csv3Data);
+readCSVFile('E:/E_Consumer_Behavior_System/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析2.csv', csv2Data);
+readCSVFile('E:/E_Consumer_Behavior_System/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析3.csv', csv3Data);
 // API端点以返回计算的平均值
 app.get('/payment-stats', (req, res) => {
     res.json(paymentStats);
