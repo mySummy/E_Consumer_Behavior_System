@@ -8,7 +8,7 @@ const iconv = require('iconv-lite');
 
 const app = express();
 const port = 3000;
-const csvFilePath = 'E:/works/Harmony/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析1.csv';
+const csvFilePath = 'E:/E_Consumer_Behavior_System/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析1.csv';
 
 // 初始化SQLite数据库连接
 const sequelize = new Sequelize({
@@ -18,21 +18,7 @@ const sequelize = new Sequelize({
 
 app.use(bodyParser.json());
 
-// 定义模型
-const XLSXData = sequelize.define('XLSXData', {
-    snumber: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    sdata: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    amount: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-    }
-});
+
 
 const User = sequelize.define('User', {
     username: {
@@ -49,6 +35,23 @@ const User = sequelize.define('User', {
 const PaymentHabit = sequelize.define('PaymentHabit', {}, { timestamps: false });
 const CustomerType = sequelize.define('CustomerType', {}, { timestamps: false });
 const PredictedUsage = sequelize.define('PredictedUsage', {}, { timestamps: false });
+
+const OperationLog = sequelize.define('OperationLog', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    timestamp: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+    },
+    operation: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+});
 
 // 同步数据库
 sequelize.sync().then(() => {
@@ -116,8 +119,8 @@ const readCSVFile = (filePath, storageArray, encoding) => {
 
 // 初始化数据读取
 readCSVAndCalculateStats(csvFilePath);
-readCSVFile('E:/works/Harmony/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析2.csv', csv2Data,'GBK');
-readCSVFile('E:/works/Harmony/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析3.csv', csv3Data,'UTF-8');
+readCSVFile('E:/E_Consumer_Behavior_System/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析2.csv', csv2Data,'GBK');
+readCSVFile('E:/E_Consumer_Behavior_System/E_Consumer_Behavior_System/project/A5-master/任务123/居民客户的用电缴费习惯分析3.csv', csv3Data,'UTF-8');
 // API端点以返回计算的平均值
 app.get('/payment-stats', (req, res) => {
     res.json(paymentStats);
@@ -183,24 +186,49 @@ app.post('/login', async (req, res) => {
 });
 
 
+// 操作记录相关的API端点
 
-// 调用Python脚本的API端点
-app.get('/analyze', async (req, res) => {
+// 增加操作记录
+app.post('/log-operation', async (req, res) => {
+    const { operation } = req.body;
+
     try {
-        exec('python 任务3.py', (error, stdout, stderr) => {
-            if (error) {
-                console.error(`exec error: ${error}`);
-                res.status(500).json({ message: 'Internal server error' });
-                return;
-            }
-            const output = JSON.parse(stdout);
-            res.status(200).json(output);
-        });
+        const newLog = await OperationLog.create({ operation });
+        res.status(201).json({ message: 'Operation logged successfully', log: newLog });
     } catch (err) {
+        console.error('Error logging operation', err);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
 
+// 删除操作记录
+app.delete('/log-operation/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const log = await OperationLog.findByPk(id);
+        if (!log) {
+            return res.status(404).json({ message: 'Operation log not found' });
+        }
+
+        await log.destroy();
+        res.status(200).json({ message: 'Operation log deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting operation log', err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// 查询操作记录
+app.get('/log-operation', async (req, res) => {
+    try {
+        const logs = await OperationLog.findAll();
+        res.status(200).json(logs);
+    } catch (err) {
+        console.error('Error fetching operation logs', err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 
 
